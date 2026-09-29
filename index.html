@@ -1320,11 +1320,15 @@ const BG = {
 function bgSVG(id, preserve = 'xMidYMax slice') { const u = 'b' + (++UID); return `<svg class="bg" viewBox="0 0 1000 1000" preserveAspectRatio="${preserve}" aria-hidden="true" stroke-linecap="round">${BG[id](u)}</svg>`; }
 
 /* =====================================================================
-   Sound: speech (Web Speech API, German) + little synth effects
+   Sound: speech + little synth effects
+   The sentences are recorded clips in voice/ (made by tools/build-voice.mjs) played through Web Audio.
+   Anything without a clip, e.g. a name typed in by the parents, is spoken by the tablet's German voice.
    ===================================================================== */
+const VOICE_CACHE = 'zk-voice'; // same name in sw.js
 const Voice = {
-  voice: null,
+  voice: null, lines: null, clips: new Map(), playing: [], turn: 0,
   init() {
+    fetch('voice/index.json').then(r => r.json()).then(m => { this.lines = m.lines; this.keep(); }).catch(() => {});
     if (!('speechSynthesis' in window)) return;
     const choose = () => {
       const vs = speechSynthesis.getVoices() || [];
@@ -1335,17 +1339,71 @@ const Voice = {
     choose();
     try { speechSynthesis.addEventListener('voiceschanged', choose); } catch (e) { speechSynthesis.onvoiceschanged = choose; }
   },
+  // Clip ids for a text: the longest run of sentences that has a clip, then the rest ("Super!" + "Die blaue Mütze!").
+  // null if any part is missing, so one sentence never mixes the recorded and the tablet voice.
+  plan(text) {
+    const L = this.lines; if (!L) return null;
+    const p = text.split(/(?<=[.!?])\s+/), ids = [];
+    for (let i = 0; i < p.length;) {
+      let j = p.length; while (j > i && !L[p.slice(i, j).join(' ')]) j--;
+      if (j === i) return null;
+      ids.push(L[p.slice(i, j).join(' ')]); i = j;
+    }
+    return ids;
+  },
+  load(id) {
+    let clip = this.clips.get(id);
+    if (!clip) {
+      clip = fetch(`voice/${id}.mp3`).then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+        .then(a => new Promise((ok, fail) => Sfx.ctx.decodeAudioData(a, ok, fail)))
+        .then(b => { // recordings open with up to a second of silence: start 0.25 s before the first loud sound
+          const d = b.getChannelData(0); let peak = 0, i = 0;
+          for (const v of d) peak = Math.max(peak, Math.abs(v));
+          while (i < d.length && Math.abs(d[i]) < peak * .1) i++;
+          b.from = Math.max(0, i / b.sampleRate - .25); return b;
+        });
+      clip.catch(() => this.clips.delete(id));
+      this.clips.set(id, clip);
+      if (this.clips.size > 40) this.clips.delete(this.clips.keys().next().value); // keep only recent clips in memory
+    }
+    return clip;
+  },
   say(text) {
-    if (!settings.voice || !('speechSynthesis' in window)) return;
+    if (!settings.voice) return;
+    this.stop();
+    const ids = this.plan(text), turn = this.turn;
+    if (!ids || !Sfx.ensure()) { this.speak(text); return; }
+    Promise.all(ids.map(id => this.load(id))).then(bufs => {
+      if (turn !== this.turn) return;
+      const c = Sfx.ctx; let t = c.currentTime + .02;
+      this.playing = bufs.map(b => { const s = c.createBufferSource(); s.buffer = b; s.connect(c.destination); s.start(t, b.from); t += b.duration - b.from; return s; });
+    }).catch(() => { if (turn === this.turn) this.speak(text); });
+  },
+  speak(text) {
+    if (!('speechSynthesis' in window)) return;
     try {
-      speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'de-DE'; if (this.voice) u.voice = this.voice;
       u.rate = .92; u.pitch = 1.25;
       speechSynthesis.speak(u);
     } catch (e) { /* speech unavailable */ }
   },
-  stop() { try { if ('speechSynthesis' in window) speechSynthesis.cancel(); } catch (e) { /* ignore */ } }
+  stop() {
+    this.turn++;
+    this.playing.forEach(s => { try { s.stop(); } catch (e) { /* already ended */ } }); this.playing = [];
+    try { if ('speechSynthesis' in window) speechSynthesis.cancel(); } catch (e) { /* ignore */ }
+  },
+  // Offline: once the app is installed, copy every clip onto the tablet in the background and drop clips an update no longer uses.
+  keep() {
+    if (!('caches' in window) || !('serviceWorker' in navigator)) return;
+    navigator.serviceWorker.ready.then(() => new Promise(r => setTimeout(r, 3000))).then(async () => {
+      const cache = await caches.open(VOICE_CACHE), have = new Set((await cache.keys()).map(r => r.url));
+      const want = new Set(Object.values(this.lines).map(id => new URL(`voice/${id}.mp3`, location.href).href));
+      await Promise.all([...have].filter(u => !want.has(u)).map(u => cache.delete(u)));
+      const todo = [...want].filter(u => !have.has(u));
+      await Promise.all([0, 1, 2, 3].map(async () => { for (let u; (u = todo.pop());) await cache.add(u); }));
+    }).catch(() => { /* offline or storage full: the rest follows on the next start */ });
+  }
 };
 const Sfx = {
   ctx: null,

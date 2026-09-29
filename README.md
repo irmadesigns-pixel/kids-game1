@@ -64,13 +64,15 @@ So wurde es eingerichtet (zum Nachschlagen):
 
 **Tipp für Kinderhände:** Unter Android kann man eine App „anpinnen“ (*Einstellungen → Passwörter & Sicherheit → Datenschutz → App-Anheftung* bzw. „Bildschirm fixieren“, je nach MIUI/HyperOS-Version). Dann kommen die Kinder nicht versehentlich aus dem Spiel heraus.
 
-**Vorlese-Stimme:** Das Spiel nutzt die Sprachausgabe des Tablets. Falls nichts zu hören ist: *Einstellungen → Zusätzliche Einstellungen → Sprachen & Eingabe → Text-in-Sprache-Ausgabe*, (der Pfad kann je nach MIUI/HyperOS-Version leicht abweichen), dort „Sprachausgabe von Google“ wählen und die deutsche Stimme herunterladen.
+**Vorlese-Stimme:** Die Prinzessin spricht mit einer fest aufgenommenen Stimme (Google-Stimme „Laomedeia“, fröhlich und etwas langsamer gesprochen). Alle Sätze liegen als MP3-Dateien im Ordner `voice/`. Beim ersten Start mit Internet lädt das Spiel sie im Hintergrund auf das Tablet (etwa 14 MB), danach funktioniert die Stimme auch offline.
+
+Nur Sätze mit selbst eingetragenen Namen (z. B. „Hallo, ich bin Peach!“) und Sätze, die (noch) nicht aufgenommen sind, spricht die Sprachausgabe des Tablets. Falls dabei nichts zu hören ist: *Einstellungen → Zusätzliche Einstellungen → Sprachen & Eingabe → Text-in-Sprache-Ausgabe*, (der Pfad kann je nach MIUI/HyperOS-Version leicht abweichen), dort „Sprachausgabe von Google“ wählen und die deutsche Stimme herunterladen.
 
 ## Eltern-Menü
 
 Auf dem Startbildschirm unten rechts das Zahnrad **gedrückt halten** (etwa 1 Sekunde). Dort kann man:
 
-- jeder Prinzessin einen eigenen Namen geben (sie stellt sich dann damit vor, z. B. Rosa als „Peach“),
+- jeder Prinzessin einen eigenen Namen geben (sie stellt sich dann damit vor, z. B. Rosa als „Peach“; diese Sätze spricht die Tablet-Stimme),
 - Stimme und Töne ein- oder ausschalten,
 - Sterne zurücksetzen und das Fotoalbum leeren.
 
@@ -85,6 +87,8 @@ Alle Prinzessinnen sind eigene Zeichnungen. Rosa ist im Stil von Peach gestaltet
 - Die Prinzessinnen stehen in `CHARS` (Hautton, Haarfarbe, Frisur, Augenfarbe, Start-Outfit).
 - Kleidung und Tiere sind in einem Katalog definiert (Funktion `kind(...)`, Abschnitt „Wardrobe catalogue“). Jedes Teil hat Kategorie, Name mit Artikel, erlaubte Farben und passende Themen. Überraschungs-Teile haben zusätzlich `need` (benötigte Sterne). Die Welten stehen in `THEMES`, die Hintergründe in `BG`.
 - `sw.js` speichert das Spiel für die Offline-Nutzung, `manifest.webmanifest` macht es installierbar.
+- **Stimme:** `voice/index.json` ordnet jedem Satz eine MP3-Datei in `voice/` zu. `Voice.say()` sucht den Satz dort und setzt zusammengesetzte Sätze aus Teilen zusammen („Super!“ + „Die blaue Mütze!“). Fehlt ein Teil, spricht die Tablet-Stimme den ganzen Satz.
+- **Neue Sätze aufnehmen:** Nach Änderungen an Kleidung, Farben, Welten oder Texten `GOOGLE_TTS_API_KEY=… node tools/build-voice.mjs` ausführen (Node 18 oder neuer). Das Skript liest die Spieldaten aus `index.html`, nimmt nur neue Sätze auf und löscht nicht mehr benutzte Dateien. Die Satzvorlagen im Skript müssen zu den `say(...)`-Aufrufen im Spiel passen. Mit `--dry` zeigt es nur an, was neu aufgenommen würde. Der API-Schlüssel gehört nicht ins Repository.
 - Gespeichert wird nur lokal auf dem Gerät (Sterne, Fotos, Einstellungen). Es werden keine Daten verschickt.
 
 Zum Testen am Computer: Ordner mit einem kleinen Webserver öffnen, z. B. `npx serve .`, und `http://localhost:3000` im Browser aufrufen.
