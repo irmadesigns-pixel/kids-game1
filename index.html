@@ -728,7 +728,7 @@ kind('witchhat', 'kopf', 'Hexenhut', 'm', ['lila', 'schwarz', 'gruen', 'orange']
   return { head: ell(150, 68, 86, 17, c, o) + sh('M112 66 C120 34 136 8 150 -14 C160 -30 180 -40 200 -30 C184 -26 174 -14 172 4 C178 28 186 48 188 66 Q150 76 112 66 Z', c, o) +
     sh('M114 56 Q150 64 186 56 L188 66 Q150 76 112 66 Z', acc, OUT(acc), 2.5) + sh('M142 56 L158 56 L158 70 L142 70 Z', 'none', '#FFD166', 3) +
     sh(starPath(152, 20, 7, 3), '#FFE680', null) + sh(starPath(166, 42, 5, 2.2), '#FFE680', null) }; });
-kind('cat', 'kopf', 'Katzenohren', 'pl', ['schwarz', 'weiss', 'orange', 'braun', 'rosa'], ['halloween'], '90 20 120 82', (x, c) => { const o = OUT(c);
+kind('catears', 'kopf', 'Katzenohren', 'pl', ['schwarz', 'weiss', 'orange', 'braun', 'rosa'], ['halloween'], '90 20 120 82', (x, c) => { const o = OUT(c);
   return { head: line('M96 96 C98 50 202 50 204 96', o, 9) + line('M96 96 C98 50 202 50 204 96', c, 5) +
     sh('M100 78 L106 28 L140 58 Z', c, o) + sh('M108 68 L111 42 L130 60 Z', '#FFB3C8', null) +
     sh('M200 78 L194 28 L160 58 Z', c, o) + sh('M192 68 L189 42 L170 60 Z', '#FFB3C8', null) }; });
@@ -1012,7 +1012,7 @@ const THEMES = [
   { id: 'halloween', name: 'Halloween', icon: 'pumpkin', tint: '#E9DDFF',
     intro: 'Buh! Heute ist Halloween. Als was verkleide ich mich?', fitQ: 'Was passt zu Halloween?', fitTo: 'zu Halloween',
     wrongFrom: ['strand', 'garten'], counts: ['pumpkin', 'bat'],
-    panel: { kleid: ['witch', 'pumpkindress', 'party', 'gown'], kopf: ['none', 'witchhat', 'cat', 'crown'], schuhe: ['witchboots', 'pumps', 'sneakers'], extra: ['none', 'bucket', 'broom', 'wand'] } },
+    panel: { kleid: ['witch', 'pumpkindress', 'party', 'gown'], kopf: ['none', 'witchhat', 'catears', 'crown'], schuhe: ['witchboots', 'pumps', 'sneakers'], extra: ['none', 'bucket', 'broom', 'wand'] } },
   { id: 'strand', name: 'Schwimmen', icon: 'sun', tint: '#D2F1FF',
     intro: 'Die Sonne scheint! Wir gehen schwimmen. Was ziehe ich an?', fitQ: 'Was passt an den Strand?', fitTo: 'an den Strand',
     wrongFrom: ['winter', 'weihnachten', 'herbst'], counts: ['shell', 'fish'],
