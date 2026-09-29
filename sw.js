@@ -1,5 +1,5 @@
 // Offline support: the game shell is cached on first visit, fonts are cached as they load.
-const CACHE = 'zauber-kleiderschrank-v1';
+const CACHE = 'zauber-kleiderschrank-v2';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png'];
 
 self.addEventListener('install', e => {

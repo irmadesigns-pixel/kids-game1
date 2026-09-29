@@ -6,8 +6,11 @@ Das Spiel ist eine einzige Webseite (`index.html`). Es braucht keine App-Store-I
 
 ## Was die Kinder machen können
 
-- **6 Themenwelten:** Ball im Schloss, Geburtstag, Halloween, Schwimmen (Strand), Schnee und Garten, jeweils mit eigenem Hintergrund und passender Kleidung.
-- **Anziehen:** Kleider, Kopfschmuck, Schuhe und Extras (Zauberstab, Luftballon, Schwimmring, Schal …) antippen. Die Prinzessin sagt dazu, was sie trägt, zum Beispiel: „Die blaue Mütze!“
+- **4 Prinzessinnen zur Auswahl:** Rosa (blonde Haare), Luna (silberne Haare), Amara (braune Locken) und Pia (rote Zöpfe mit Sommersprossen). Jede hat ihren eigenen Kleiderschrank pro Welt.
+- **10 Themenwelten:** Ball im Schloss, Geburtstag, Halloween, Schwimmen (Strand), Meerjungfrau (unter Wasser), Schnee, Weihnachten, Garten, Herbst (mit Regen und Laterne) und Weltraum, jeweils mit eigenem Hintergrund und passender Kleidung.
+- **Anziehen:** Kleider, Kopfschmuck, Schuhe und Extras (Zauberstab, Luftballon, Schwimmring, Schal, Raumhelm, Meerjungfrauen-Kleid …) antippen. Die Prinzessin sagt dazu, was sie trägt, zum Beispiel: „Die blaue Mütze!“
+- **Tierfreunde:** Kätzchen, Hündchen, Häschen, Einhorn oder ein kleiner Drache sitzen neben der Prinzessin. Tippt man das Tier an, hüpft es und macht sein Geräusch.
+- **Tanzparty (Noten-Knopf):** Die Prinzessin tanzt zu „Alle meine Entchen“, „Hänschen klein“ oder „Blinke, blinke, kleiner Stern“ (an Weihnachten: „Morgen kommt der Weihnachtsmann“), mit Discolicht und fliegenden Noten.
 - **Farbtöpfe:** Unter der Kleidung sind Farbkleckse. Ein Tipp färbt das Teil um, und die Farbe wird laut gesagt.
 - **Zauberstab-Knopf:** Ein zufälliges Outfit, das zum Thema passt.
 - **Kamera:** Speichert ein Foto im Fotoalbum (bleibt auf dem Tablet gespeichert).
@@ -15,15 +18,32 @@ Das Spiel ist eine einzige Webseite (`index.html`). Es braucht keine App-Store-I
 
 ## Lern-Elemente (gelber Stern-Knopf)
 
-Der große gelbe Stern startet ein Rätsel. Für jede richtige Antwort gibt es einen Stern, alle 5 Sterne gibt es eine kleine Feier.
+Der große gelbe Stern startet ein Rätsel. Die vier Rätselarten wechseln sich ab. Für jede richtige Antwort gibt es einen Stern.
 
 1. **Farben:** „Wo ist der blaue Luftballon?“ Drei Varianten zur Auswahl. Bei einer falschen Antwort sagt die Prinzessin die Farbe („Das ist Rot. Such Blau!“) und zeigt einen Farbklecks als Hilfe.
 2. **Was passt?:** „Was brauche ich im Schnee?“ Mütze, Badeanzug oder Flip-Flops? Die falschen Antworten sind immer eindeutig falsch, damit es keine Streitfälle gibt.
 3. **Zählen:** „Wie viele Kürbisse siehst du?“ Die Kinder können die Dinge antippen, dann wird mitgezählt. Bei einer falschen Antwort zählt die Prinzessin gemeinsam mit dem Kind: „Eins, zwei, drei. Tipp auf die 3.“
+4. **Formen:** „Wo ist das Herz?“ Kreis, Dreieck, Quadrat, Stern und Herz. Bei einer falschen Antwort heißt es zum Beispiel: „Das ist ein Kreis. Such das Herz!“
+
+### Überraschungen mit Sternen
+
+Bei 5, 10, 15, 20 und 25 Sternen gibt es ein Geschenk zum Auspacken. Darin steckt ein neues Zauber-Teil, das ab dann in allen Welten im Kleiderschrank liegt (mit kleinem Stern markiert):
+
+| Sterne | Überraschung |
+| --- | --- |
+| 5 | Einhorn-Haarreif |
+| 10 | Sternenkleid |
+| 15 | Regenbogenflügel |
+| 20 | Glitzerschuhe |
+| 25 | Königsumhang |
+
+Setzt man im Eltern-Menü die Sterne auf 0, sind die Überraschungen wieder verschlossen und können neu gesammelt werden.
 
 ## Auf das Xiaomi-Tablet bringen
 
-Das Repository ist privat. Das Spiel muss daher irgendwo als Webseite erreichbar sein. Drei Möglichkeiten:
+Das Spiel läuft über GitHub Pages unter **https://irmadesigns-pixel.github.io/kids-game1/**. Neue Versionen erscheinen dort automatisch, sobald sie im Branch liegen. Auf dem Tablet zeigt die installierte App nach dem nächsten Start mit Internet die neue Version.
+
+So wurde es eingerichtet (zum Nachschlagen):
 
 **A) GitHub Pages (kostenlos, empfohlen, wenn das Repository öffentlich sein darf)**
 1. Auf GitHub: *Settings → General → Danger Zone → Change visibility → Public*. Der Code enthält keine persönlichen Daten.
@@ -50,19 +70,20 @@ Das Repository ist privat. Das Spiel muss daher irgendwo als Webseite erreichbar
 
 Auf dem Startbildschirm unten rechts das Zahnrad **gedrückt halten** (etwa 1 Sekunde). Dort kann man:
 
-- der Prinzessin einen Namen geben (sie stellt sich dann damit vor),
+- jeder Prinzessin einen eigenen Namen geben (sie stellt sich dann damit vor, z. B. Rosa als „Peach“),
 - Stimme und Töne ein- oder ausschalten,
 - Sterne zurücksetzen und das Fotoalbum leeren.
 
-## Zur Figur
+## Zu den Figuren
 
-Die Prinzessin ist eine eigene Zeichnung im Stil von Peach (blonde Haare, rosa Kleid, Krone), aber keine Nintendo-Grafik. Offizielle Mario-Bilder sind urheberrechtlich geschützt und deshalb nicht enthalten. Im Eltern-Menü kann man sie trotzdem „Peach“ nennen.
+Alle Prinzessinnen sind eigene Zeichnungen. Rosa ist im Stil von Peach gestaltet (blonde Haare, rosa Kleid, Krone), aber keine Nintendo-Grafik. Offizielle Mario-Bilder sind urheberrechtlich geschützt und deshalb nicht enthalten. Im Eltern-Menü kann man sie trotzdem „Peach“ nennen.
 
 ## Technik (für später)
 
 - Alles steckt in `index.html`: HTML, CSS und JavaScript, ohne Build-Schritt und ohne Bibliotheken.
 - Alle Bilder sind Vektorgrafiken (SVG), die im Code gezeichnet werden. Sie sind auf jedem Bildschirm scharf, und die Datei bleibt klein.
-- Kleidung ist in einem Katalog definiert (Funktion `kind(...)`, Abschnitt „Wardrobe catalogue“). Jedes Teil hat Kategorie, Name mit Artikel, erlaubte Farben und passende Themen. Neue Themen stehen in `THEMES`.
+- Die Prinzessinnen stehen in `CHARS` (Hautton, Haarfarbe, Frisur, Augenfarbe, Start-Outfit).
+- Kleidung und Tiere sind in einem Katalog definiert (Funktion `kind(...)`, Abschnitt „Wardrobe catalogue“). Jedes Teil hat Kategorie, Name mit Artikel, erlaubte Farben und passende Themen. Überraschungs-Teile haben zusätzlich `need` (benötigte Sterne). Die Welten stehen in `THEMES`, die Hintergründe in `BG`.
 - `sw.js` speichert das Spiel für die Offline-Nutzung, `manifest.webmanifest` macht es installierbar.
 - Gespeichert wird nur lokal auf dem Gerät (Sterne, Fotos, Einstellungen). Es werden keine Daten verschickt.
 
