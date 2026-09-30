@@ -1,17 +1,20 @@
 #!/usr/bin/env node
-// Records everything the princess says as MP3 clips (Google Cloud Text-to-Speech) into voice/.
+// Records everything the characters say as MP3 clips (Google Cloud Text-to-Speech) into voice/.
 //
 //   GOOGLE_TTS_API_KEY=... node tools/build-voice.mjs         record new sentences, drop unused clips
 //   node tools/build-voice.mjs --dry                          only list what would be recorded
 //
-// The sentences are rebuilt from the game data in index.html (clothes, colours, worlds, riddles), so new
-// items are picked up automatically. The templates below mirror the say(...) calls in index.html: when a
+// The sentences are rebuilt from the game data in index.html (characters, clothes, colours, worlds, riddles),
+// so new items are picked up automatically. The templates below mirror the say(...) calls in index.html: when a
 // sentence there changes, change it here too. Anything without a clip is spoken by the tablet voice instead.
+//
+// Voices: the game voice speaks everything; characters with their own `voice` (see CHARS) additionally get
+// their own recording of what they say about themselves (greeting, intros, giggles, magic words ...).
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import vm from 'node:vm';
 
-const VOICE = 'de-DE-Chirp3-HD-Laomedeia', RATE = 0.9;
+const GAME_VOICE = 'Laomedeia', RATE = 0.9, voiceName = v => `de-DE-Chirp3-HD-${v}`;
 const ROOT = new URL('../', import.meta.url), OUT = new URL('voice/', ROOT);
 const DRY = process.argv.includes('--dry');
 
@@ -29,22 +32,27 @@ const colorsOf = k => (k.colors.length ? k.colors : [null]);
 /* ---------- every sentence the game can say ---------- */
 // A sentence is either recorded whole, or as separate clips per sentence part ("Super!" + "Die blaue Mütze!"),
 // which the game plays back to back. Splitting keeps combinations like praise × item from multiplying.
+// `who` is the speaker: 'game' for the game voice, or the id of a character with its own voice.
 const sentences = t => t.split(/(?<=[.!?])\s+/);
-const clips = new Set(), spoken = [];
-const line = (text, units = [text]) => { spoken.push(text); units.forEach(u => clips.add(u)); };
+const clips = { game: new Set() }, spoken = [];
+const line = (text, units = [text], who = 'game') => { spoken.push({ text, who }); units.forEach(u => (clips[who] = clips[who] || new Set()).add(u)); };
 const split = text => line(text, sentences(text));
+const own = (c, text) => line(text, [text], c.voice ? c.id : 'game'); // what a character says about itself
 
 // Start, navigation, album
-line('Hallo! Wer spielt heute mit?'); line('Wer spielt mit?'); line('Wohin gehen wir jetzt?');
+line('Hallo! Wer spielt heute mit?'); line('Wer spielt mit?');
 line('Das Fotoalbum!'); line('Das Album ist noch leer.');
 CHARS.forEach(c => {
-  line(`Hallo, ich bin ${c.name}! Wohin gehen wir heute?`); line(`Ich bin ${c.name}!`);
-  THEMES.forEach(t => line(`${c.name}: ${t.name}!`));
+  const names = [c.name, c.alt].filter(Boolean); // alt: the name suggested in the parents' menu, e.g. "Peach"
+  names.forEach(n => { own(c, `Hallo, ich bin ${n}! Wohin gehen wir heute?`); own(c, `Ich bin ${n}!`); THEMES.forEach(t => line(`${n}: ${t.name}!`)); });
+  ['Hihi!', 'Das kitzelt!', 'Ich sehe toll aus!', 'Danke schön!', 'Du bist super!', 'Juhu!', ...(c.taps || [])].forEach(t => own(c, t));
+  ['Simsalabim!', 'Abrakadabra!', 'Hokuspokus!', 'Weg damit!', 'Wohin gehen wir jetzt?'].forEach(t => own(c, t));
+  THEMES.forEach(t => { own(c, (c.intro || {})[t.id] || t.intro); own(c, t.fitQ); });
+  [...SONGS, XMAS_SONG].forEach(s => own(c, `Musik! Wir tanzen zu ${s.name}!`));
 });
 // Dressing up
-THEMES.forEach(t => line(t.intro));
 CATS.forEach(c => line(c.say));
-line('Weg damit!'); line('Magst du ein Rätsel? Tipp auf den Stern!');
+line('Magst du ein Rätsel? Tipp auf den Stern!');
 Object.values(COLORS).forEach(c => line(c.name + '!'));
 ITEMS.forEach(k => colorsOf(k).forEach(c => {
   const name = cap(phrase(k, c)) + '!', call = k.call ? ' ' + k.call : '';
@@ -52,10 +60,7 @@ ITEMS.forEach(k => colorsOf(k).forEach(c => {
   line(name + call); // tapped again
   if (k.call) line(k.call); // pet tapped
 }));
-['Hihi!', 'Das kitzelt!', 'Ich sehe toll aus!', 'Danke schön!', 'Du bist super!', 'Juhu!'].forEach(t => line(t));
-['Simsalabim!', 'Abrakadabra!', 'Hokuspokus!'].forEach(t => line(t));
 ['Klick! Das kommt ins Fotoalbum.', 'Cheese! Ein tolles Foto!', 'Wunderschön! Das Foto ist im Album.'].forEach(t => line(t));
-[...SONGS, XMAS_SONG].forEach(s => line(`Musik! Wir tanzen zu ${s.name}!`));
 ['Toll getanzt!', 'Das hat Spaß gemacht!', 'Bravo! Du tanzt super!'].forEach(t => line(t));
 // Stars and surprises (stars keep counting, so milestones are recorded up to 500)
 SPECIALS.forEach(k => {
@@ -72,14 +77,11 @@ ITEMS.filter(k => k.colors.length >= 3).forEach(k => k.colors.forEach(c => {
   k.colors.forEach(w => { if (w !== c) split(`Das ist ${COLORS[w].name}. Such ${COLORS[c].name}!`); });
 }));
 // Riddle: what fits
-THEMES.forEach(th => {
-  line(th.fitQ);
-  ITEMS.forEach(k => {
-    const verb = k.g === 'pl' ? 'passen' : 'passt';
-    if (k.themes.includes(th.id)) split(`Ja! ${cap(phrase(k))} ${verb} super ${th.fitTo}!`);
-    if (isWrongFor(k, th)) split(`Hmm, ${phrase(k)} ${verb} nicht ${th.fitTo}. Versuch es nochmal!`);
-  });
-});
+THEMES.forEach(th => ITEMS.forEach(k => {
+  const verb = k.g === 'pl' ? 'passen' : 'passt';
+  if (k.themes.includes(th.id)) split(`Ja! ${cap(phrase(k))} ${verb} super ${th.fitTo}!`);
+  if (isWrongFor(k, th)) split(`Hmm, ${phrase(k)} ${verb} nicht ${th.fitTo}. Versuch es nochmal!`);
+}));
 // Riddle: counting
 line('Hmm, lass uns zusammen zählen!');
 for (let n = 1; n <= 5; n++) { line(NUMW[n]); split(`${NUMW[n]}! Tipp auf die ${n}.`); }
@@ -95,49 +97,64 @@ Object.values(SHAPES).forEach(S => {
   ALL.forEach(c => PRAISE.forEach(p => split(`${p}! ${cap(art)} ${adj(c, false)} ${S.name}!`)));
   Object.values(SHAPES).forEach(W => { if (W !== S) split(`Das ist ein ${W.name}. Such ${S.g === 'm' ? 'den' : 'das'} ${S.name}!`); });
 });
+// Riddle: what comes next (colours or shapes repeat); wrong answers read the row aloud
+line('Was kommt als Nächstes?'); line('Hmm, lass uns die Reihe zusammen sagen!'); line('Und was kommt dann?');
+ALL.forEach(c => PRAISE.forEach(p => split(`${p}! ${COLORS[c].name}!`)));
+Object.values(SHAPES).forEach(S => { line(S.name + '!'); PRAISE.forEach(p => split(`${p}! ${S.g === 'm' ? 'Der' : 'Das'} ${S.name}!`)); });
+// Riddle: biggest and smallest
+line('Hmm, schau genau: Was ist am größten?'); line('Hmm, schau genau: Was ist am kleinsten?');
+[...new Set(THEMES.flatMap(th => th.counts))].forEach(o => ['größte', 'kleinste'].forEach(word => {
+  const noun = COUNTS[o].one.split(' ')[1], art = { m: 'der', f: 'die', n: 'das' }[COUNTS[o].g];
+  line(`Wo ist ${art} ${word} ${noun}?`);
+  PRAISE.forEach(p => split(`${p}! ${cap(art)} ${word} ${noun}!`));
+}));
 
 /* ---------- record ---------- */
-const idOf = t => createHash('sha1').update(`${VOICE}|${RATE}|${t}`).digest('hex').slice(0, 12);
-const lines = Object.fromEntries([...clips].sort((a, b) => a.localeCompare(b, 'de')).map(t => [t, idOf(t)]));
+const VOICES = Object.fromEntries(Object.keys(clips).map(w => [w, voiceName(w === 'game' ? GAME_VOICE : CHARS.find(c => c.id === w).voice)]));
+const idOf = (w, t) => createHash('sha1').update(`${VOICES[w]}|${RATE}|${t}`).digest('hex').slice(0, 12);
+const maps = Object.fromEntries(Object.entries(clips).map(([w, set]) => [w, Object.fromEntries([...set].sort((a, b) => a.localeCompare(b, 'de')).map(t => [t, idOf(w, t)]))]));
 
-// Same lookup as Voice.plan() in index.html: longest run of sentence parts that has a clip, then the rest.
-const covered = text => {
+// Same lookup as Voice.plan() in index.html: longest run of sentence parts that has a clip, then the rest;
+// the speaker's own clips first, then the game voice.
+const covered = (text, L) => {
   const p = sentences(text);
-  for (let i = 0; i < p.length;) { let j = p.length; while (j > i && !lines[p.slice(i, j).join(' ')]) j--; if (j === i) return false; i = j; }
+  for (let i = 0; i < p.length;) { let j = p.length; while (j > i && !L[p.slice(i, j).join(' ')]) j--; if (j === i) return false; i = j; }
   return true;
 };
-const gaps = spoken.filter(t => !covered(t));
-if (gaps.length) throw new Error('Not covered:\n' + gaps.join('\n'));
+const gaps = spoken.filter(({ text, who }) => !(maps[who] && covered(text, maps[who])) && !covered(text, maps.game));
+if (gaps.length) throw new Error('Not covered:\n' + gaps.map(g => g.text).join('\n'));
 
-const todo = Object.entries(lines).filter(([, id]) => !existsSync(new URL(id + '.mp3', OUT)));
-const chars = todo.reduce((a, [t]) => a + t.length, 0);
-console.log(`${spoken.length} sentences, ${Object.keys(lines).length} clips, ${todo.length} new (${chars} characters)`);
-if (DRY) { todo.forEach(([t]) => console.log('  ' + t)); process.exit(0); }
+const jobs = Object.entries(maps).flatMap(([w, L]) => Object.entries(L).map(([t, id]) => ({ w, t, id }))).filter(j => !existsSync(new URL(j.id + '.mp3', OUT)));
+const total = Object.values(maps).reduce((a, L) => a + Object.keys(L).length, 0), chars = jobs.reduce((a, j) => a + j.t.length, 0);
+console.log(`${spoken.length} sentences, ${total} clips (${Object.entries(maps).map(([w, L]) => `${w} ${Object.keys(L).length}`).join(', ')}), ${jobs.length} new (${chars} characters)`);
+if (DRY) { jobs.forEach(j => console.log(`  [${j.w}] ${j.t}`)); process.exit(0); }
 
 const KEY = process.env.GOOGLE_TTS_API_KEY;
-if (todo.length && !KEY) { console.error('GOOGLE_TTS_API_KEY is not set'); process.exit(1); }
+if (jobs.length && !KEY) { console.error('GOOGLE_TTS_API_KEY is not set'); process.exit(1); }
 mkdirSync(OUT, { recursive: true });
-async function record(text, id) {
+async function record({ w, t, id }) {
   for (let attempt = 1; ; attempt++) {
     const res = await fetch('https://texttospeech.googleapis.com/v1/text:synthesize', {
       method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Goog-Api-Key': KEY },
-      body: JSON.stringify({ input: { text }, voice: { languageCode: 'de-DE', name: VOICE }, audioConfig: { audioEncoding: 'MP3', speakingRate: RATE } })
+      body: JSON.stringify({ input: { text: t }, voice: { languageCode: 'de-DE', name: VOICES[w] }, audioConfig: { audioEncoding: 'MP3', speakingRate: RATE } })
     });
     if (res.ok) { writeFileSync(new URL(id + '.mp3', OUT), Buffer.from((await res.json()).audioContent, 'base64')); return; }
-    if (attempt >= 5 || ![429, 500, 502, 503].includes(res.status)) throw new Error(`${res.status} for "${text}": ${await res.text()}`);
+    if (attempt >= 5 || ![429, 500, 502, 503].includes(res.status)) throw new Error(`${res.status} for "${t}": ${await res.text()}`);
     await new Promise(r => setTimeout(r, 1000 * 2 ** attempt));
   }
 }
 let done = 0;
-const queue = todo.slice();
+const queue = jobs.slice();
 await Promise.all(Array.from({ length: 4 }, async () => {
-  for (let job; (job = queue.shift());) { await record(...job); if (++done % 50 === 0) console.log(`  ${done}/${todo.length}`); }
+  for (let job; (job = queue.shift());) { await record(job); if (++done % 50 === 0) console.log(`  ${done}/${jobs.length}`); }
 }));
 
 // Index for the game (one line per clip keeps diffs readable), then drop clips nothing uses any more.
-const body = Object.entries(lines).map(([t, id]) => `  ${JSON.stringify(t)}: "${id}"`).join(',\n');
-writeFileSync(new URL('index.json', OUT), `{\n"voice": "${VOICE}",\n"rate": ${RATE},\n"lines": {\n${body}\n}\n}\n`);
-const keep = new Set(Object.values(lines).map(id => id + '.mp3'));
+const block = L => Object.entries(L).map(([t, id]) => `  ${JSON.stringify(t)}: "${id}"`).join(',\n');
+const speakers = Object.keys(maps).filter(w => w !== 'game');
+writeFileSync(new URL('index.json', OUT), `{\n"voices": ${JSON.stringify(VOICES)},\n"rate": ${RATE},\n"lines": {\n${block(maps.game)}\n},\n"speakers": {\n` +
+  speakers.map(w => `${JSON.stringify(w)}: {\n${block(maps[w])}\n}`).join(',\n') + `\n}\n}\n`);
+const keep = new Set(Object.values(maps).flatMap(L => Object.values(L)).map(id => id + '.mp3'));
 const stale = readdirSync(OUT).filter(f => f.endsWith('.mp3') && !keep.has(f));
 stale.forEach(f => unlinkSync(new URL(f, OUT)));
 console.log(`Recorded ${done} clips, removed ${stale.length} unused.`);

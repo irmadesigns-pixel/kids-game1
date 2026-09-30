@@ -77,7 +77,7 @@ svg{display:block}
 .themes{background:linear-gradient(180deg,#FFF1F8 0%,#FFE0EE 100%);display:flex;flex-direction:column}
 .bar{display:flex;align-items:center;gap:var(--gap);padding:var(--gap) calc(var(--gap) + 4px)}
 .bar h2{flex:1;margin:0;text-align:center;font-family:var(--font-display);font-weight:800;font-size:clamp(24px,5vmin,48px);color:var(--ink);line-height:1.05;text-wrap:balance}
-.theme-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:minmax(0,1fr);gap:clamp(12px,2.4vmin,24px);padding:0 calc(var(--gap) + 8px) calc(var(--gap) + 8px)}
+.theme-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(0,1fr);gap:clamp(12px,2.4vmin,24px);padding:0 calc(var(--gap) + 8px) calc(var(--gap) + 8px)}
 .tcard{position:relative;border:6px solid #fff;border-radius:30px;overflow:hidden;padding:0;background:#fff;box-shadow:var(--shadow);transition:transform .15s;min-height:0}
 .tcard:active{transform:scale(.96)}
 .tcard .bg{position:absolute;inset:0;width:100%;height:100%}
@@ -107,8 +107,8 @@ svg{display:block}
 .bubble{position:absolute;top:calc(var(--gap) + var(--rb)*.1);left:calc(var(--rb) + var(--gap)*2);right:calc(var(--gap)*2 + 120px);z-index:2;display:flex;justify-content:center;pointer-events:none}
 .bubble p{margin:0;background:#fff;border-radius:22px;padding:8px 20px;font-weight:700;font-size:clamp(17px,3vmin,26px);line-height:1.2;box-shadow:var(--shadow);animation:pop .3s;max-width:100%;text-wrap:balance;text-align:center}
 .panel{position:absolute;right:var(--gap);top:var(--gap);bottom:var(--gap);width:var(--panel-w);display:flex;flex-direction:column;gap:clamp(8px,1.6vmin,14px);background:rgba(255,255,255,.94);border-radius:34px;box-shadow:var(--shadow);padding:clamp(8px,1.6vmin,14px)}
-.items[data-n="5"],.items[data-n="6"],.items[data-n="7"]{--cols:3}
-.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(6px,1.4vmin,12px)}
+.items[data-n="5"],.items[data-n="6"],.items[data-n="7"],.items[data-n="8"],.items[data-n="9"]{--cols:3}
+.tabs{display:grid;grid-template-columns:repeat(var(--n,5),1fr);gap:clamp(6px,1.4vmin,12px)}
 .tab{height:clamp(54px,11vmin,92px);min-width:0;border-radius:20px;border:4px solid transparent;background:var(--blush);padding:6px;transition:transform .15s}
 .tab svg{width:100%;height:100%}
 .tab.on{background:#fff;border-color:var(--rose);box-shadow:0 4px 0 var(--rose-deep)}
@@ -146,6 +146,11 @@ svg{display:block}
 .numc .dots{display:grid;grid-template-columns:repeat(var(--cols,3),auto);gap:6px;justify-content:center}
 .numc .dots i{width:clamp(10px,2vmin,16px);height:clamp(10px,2vmin,16px);border-radius:50%;background:var(--rose)}
 .choice.right{border-color:var(--leaf);background:#EEFFF1;animation:pop .45s}
+.choice .sz{display:block;width:calc(var(--z) * 100%);aspect-ratio:1}
+.pat{width:clamp(46px,11vmin,96px);aspect-ratio:1;display:grid;place-items:center;border-radius:18px}
+.pat svg{width:88%;height:88%}
+.pat.ask{border:4px dashed var(--rose);color:var(--rose);font-weight:800;font-size:clamp(28px,7vmin,60px);background:#FFF4F9}
+.pat.hi{animation:pop .5s;background:#FFF1B8}
 .choice.wrong{animation:shake .45s}
 .choice.dim{opacity:.4}
 
@@ -275,8 +280,8 @@ svg{display:block}
 @media (orientation:portrait){
   .start{flex-direction:column;gap:8px}
   .start-princess{height:58%;max-width:80%}
-  .theme-grid{grid-template-columns:repeat(2,1fr)}
-  .char-grid{grid-template-columns:repeat(2,1fr)}
+  .theme-grid{grid-template-columns:repeat(3,1fr)}
+  .char-grid{grid-template-columns:repeat(4,1fr)}
   .tcard-icon{width:auto;height:54%;top:41%}
   .stage{right:0;bottom:44%;border-radius:0 0 34px 34px}
   .panel{left:var(--gap);right:var(--gap);top:auto;width:auto;height:calc(44% - var(--gap)*2)}
@@ -298,7 +303,7 @@ svg{display:block}
     <div class="start-princess" id="start-princess"></div>
     <div class="start-copy">
       <h1 class="logo"><span class="l1">Zauber-</span><span>Kleiderschrank</span></h1>
-      <p class="tagline">Zieh die Prinzessin an!</p>
+      <p class="tagline">Zieh deine Freunde an!</p>
       <button class="play" id="btn-play" aria-label="Spielen"></button>
     </div>
     <p class="parent-hint">Eltern: gedrückt halten</p>
@@ -329,7 +334,7 @@ svg{display:block}
   <section id="scr-play" class="screen play-scr" aria-label="Anziehen" hidden>
     <div class="stage">
       <div class="scene" id="scene"></div>
-      <div class="pwrap"><div class="princess" id="princess" role="img" aria-label="Prinzessin"></div><div class="fx" id="fx"></div></div>
+      <div class="pwrap"><div class="princess" id="princess" role="img" aria-label="Figur"></div><div class="fx" id="fx"></div></div>
       <div class="disco"></div>
       <div class="bubble" id="bubble" hidden><p id="bubble-txt"></p></div>
       <div class="rail">
@@ -389,7 +394,7 @@ svg{display:block}
   <div class="parent" id="parent" hidden>
     <form class="parent-card" id="parent-form" autocomplete="off">
       <h3>Für Eltern</h3>
-      <p>Namen der Prinzessinnen (leer lassen für den Standardnamen):</p>
+      <p>Namen der Figuren (leer lassen für den Standardnamen). Die vorgeschlagenen Namen sind mit der Spielstimme aufgenommen, andere Namen spricht die Tablet-Stimme.</p>
       <div id="set-names" style="display:flex;flex-direction:column;gap:10px"></div>
       <div class="prow"><input type="checkbox" id="set-voice"><label for="set-voice">Vorlese-Stimme</label></div>
       <div class="prow"><input type="checkbox" id="set-sound"><label for="set-sound">Töne und Musik-Effekte</label></div>
@@ -504,7 +509,7 @@ function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let
 let UID = 0;
 function makeCtx(ch) {
   const uid = 'z' + (++UID); let n = 0;
-  const ctx = { uid, defs: '', skin: ch ? ch.skin : '#FFE3CF', skinO: ch ? ch.skinO : '#E5A88A' };
+  const ctx = { uid, defs: '', skin: ch ? ch.skin : '#FFE3CF', skinO: ch ? ch.skinO : '#E5A88A', shirt: !!(ch && ch.shirt) };
   ctx.id = () => uid + '_' + (n++);
   ctx.pat = (type, base, acc) => {
     const id = ctx.id(); let s = 24, inner = '';
@@ -538,14 +543,32 @@ function makeCtx(ch) {
 const LASH = '#4A2B3F';
 const ARM_PATH = 'M126 206 Q110 250 99 292 M174 206 Q190 250 201 292';
 const CHARS = [
-  { id: 'rosa', name: 'Rosa', desc: 'blonde Haare', bg: '#FFE3F0', skin: '#FFE3CF', skinO: '#E5A88A', hair: '#FFD65C', hairO: '#DFA22E', hairL: '#FFF3B0', eye: '#3F7FE0', blush: '#FF8FAB', style: 'long',
+  { id: 'rosa', name: 'Peach', alt: 'Rosa', desc: 'blonde Haare', bg: '#FFE3F0', skin: '#FFE3CF', skinO: '#E5A88A', hair: '#FFD65C', hairO: '#DFA22E', hairL: '#FFF3B0', eye: '#3F7FE0', blush: '#FF8FAB', style: 'long',
     start: { kleid: { k: 'gown', c: 'rosa' }, kopf: { k: 'crown', c: 'gold' }, schuhe: { k: 'pumps', c: 'rosa' }, extra: { k: 'none' }, tier: { k: 'none' } } },
   { id: 'luna', name: 'Luna', desc: 'silberne Haare', bg: '#E4E6FF', skin: '#FFEDE3', skinO: '#E3B09A', hair: '#EEF1FA', hairO: '#A3AED0', hairL: '#FFFFFF', eye: '#8C6AE0', blush: '#FFA3BF', style: 'swept',
     start: { kleid: { k: 'ice', c: 'blau' }, kopf: { k: 'tiara', c: 'silber' }, schuhe: { k: 'pumps', c: 'silber' }, extra: { k: 'none' }, tier: { k: 'none' } } },
   { id: 'amara', name: 'Amara', desc: 'braune Locken', bg: '#FFEFD2', skin: '#B8784F', skinO: '#80502F', hair: '#3A2418', hairO: '#1E120B', hairL: '#6E4A33', eye: '#5A3418', blush: '#E0735F', style: 'curls',
     start: { kleid: { k: 'gown', c: 'gelb' }, kopf: { k: 'crown', c: 'gold' }, schuhe: { k: 'pumps', c: 'gold' }, extra: { k: 'none' }, tier: { k: 'none' } } },
   { id: 'pia', name: 'Pia', desc: 'rote Zöpfe', bg: '#DFF5DA', skin: '#FFE6D6', skinO: '#E6AC90', hair: '#EE7A3E', hairO: '#B8501F', hairL: '#FFB27F', eye: '#3E9E5A', blush: '#FF9A8A', style: 'pigtails', freckles: true,
-    start: { kleid: { k: 'party', c: 'gruen' }, kopf: { k: 'bow', c: 'gelb' }, schuhe: { k: 'sneakers', c: 'gelb' }, extra: { k: 'none' }, tier: { k: 'none' } } }
+    start: { kleid: { k: 'party', c: 'gruen' }, kopf: { k: 'bow', c: 'gelb' }, schuhe: { k: 'sneakers', c: 'gelb' }, extra: { k: 'none' }, tier: { k: 'none' } } },
+  // The friends: kind 'boy' wears the boys' outfits over a T-shirt and shorts, kind 'snow' has no clothes tab.
+  // voice: own recorded voice for what they say about themselves; size: [wide, tall] around the feet; bare: tabs that may stay empty.
+  { id: 'toni', name: 'Mario', alt: 'Toni', desc: 'rote Kappe', kind: 'boy', voice: 'Fenrir', bg: '#FFE1DC', skin: '#FFE0C8', skinO: '#E0A07E', hair: '#6B4226', hairO: '#43280F', hairL: '#8E5E3A', eye: '#3F7FE0', blush: '#FF9A8A', style: 'toni',
+    shirt: '#F2545B', shorts: '#3F66B5', size: [1.05, .96], bare: ['kleid'], taps: ['Juhu! Los geht\'s!', 'Hoppla! Das war ein Sprung!'],
+    intro: { schloss: 'Ein Ball im Schloss! Da komme ich natürlich mit. Was ziehe ich an?' },
+    start: { kleid: { k: 'overalls', c: 'blau' }, kopf: { k: 'cap', c: 'rot' }, schuhe: { k: 'boots', c: 'braun' }, extra: { k: 'none' }, tier: { k: 'none' } } },
+  { id: 'luca', name: 'Luigi', alt: 'Luca', desc: 'grüne Kappe', kind: 'boy', voice: 'Achird', bg: '#DDF3DA', skin: '#FFE3CE', skinO: '#E0A482', hair: '#4A3020', hairO: '#2B1A0F', hairL: '#6E4A33', eye: '#3F7FE0', blush: '#FF9A8A', style: 'luca',
+    shirt: '#46B15A', shorts: '#3F66B5', size: [.95, 1.07], bare: ['kleid'], taps: ['Hihi, ich bin ein bisschen kitzelig.', 'Ich bin mutig! Ganz bestimmt!'],
+    intro: { halloween: 'Huch! Halloween! Ein bisschen gruselig ist das schon. Was ziehe ich an?' },
+    start: { kleid: { k: 'overalls', c: 'blau' }, kopf: { k: 'cap', c: 'gruen' }, schuhe: { k: 'boots', c: 'braun' }, extra: { k: 'none' }, tier: { k: 'none' } } },
+  { id: 'krawumm', name: 'Krawumm', alt: 'Bowser', desc: 'lieber Drachenkönig', kind: 'boy', voice: 'Algenib', bg: '#FFF0C9', skin: '#A6D65E', skinO: '#5E9A2E', hair: '#F2603F', hairO: '#B8322F', hairL: '#FF9B7A', eye: '#E08A1E', blush: '#FF8F6B', style: 'dragon',
+    size: [1.1, 1.05], bare: ['kleid', 'schuhe'], taps: ['Roaaar! Hihi, war nur Spaß!', 'Ich bin ein lieber Drachenkönig!'],
+    intro: { schloss: 'Ein Ball im Schloss! Ein König braucht was ganz Schickes. Was ziehe ich an?' },
+    start: { kleid: { k: 'none' }, kopf: { k: 'crown', c: 'gold' }, schuhe: { k: 'none' }, extra: { k: 'none' }, tier: { k: 'none' } } },
+  { id: 'flocke', name: 'Flocke', alt: 'Olaf', desc: 'Schneemann', kind: 'snow', voice: 'Puck', bg: '#E3F1FF', skin: '#FFFFFF', skinO: '#AFC6E0', hair: '#8A5A3C', hairO: '#5E3B24', hairL: '#B07A52', eye: '#3D3547', blush: '#FFB3C8', style: 'snow',
+    tabs: ['kopf', 'schuhe', 'extra', 'tier'], bare: ['schuhe'], taps: ['Ich liebe Umarmungen!', 'Brrr, ich bin ein bisschen kalt. Hihi!'],
+    intro: { strand: 'Die Sonne scheint! Hoffentlich schmelze ich nicht. Was ziehe ich an?', winter: 'Juhu, es schneit! Das ist mein Lieblingswetter! Was ziehe ich an?' },
+    start: { kopf: { k: 'none' }, schuhe: { k: 'none' }, extra: { k: 'scarf', c: 'rot' }, tier: { k: 'none' } } }
 ];
 const CHAR = Object.fromEntries(CHARS.map(c => [c.id, c]));
 
@@ -583,9 +606,94 @@ function hairFor(ch) {
         line('M112 72 Q128 60 146 60', L, 5, 'opacity=".9"') + line('M190 82 Q196 92 198 102', L, 4, 'opacity=".8"') };
   }
 }
+/* ---------------- the friends: two brothers, a friendly dragon king and a snowman ---------------- */
+const TEE = 'M123 196 Q134 190 139 190 Q150 202 161 190 Q166 190 177 196 L181 276 Q150 285 119 276 Z';
+const SLEEVES = 'M132 193 Q121 194 117 203 L104 232 Q115 240 127 241 L131 214 Z M168 193 Q179 194 183 203 L196 232 Q185 240 173 241 L169 214 Z';
+const LEGS = 'M138 300 L137 474 M162 300 L163 474';
+function spikeAt(cx, cy, rx, ry, deg, len, fill, stroke) { // cone on the rim of an ellipse, pointing outwards
+  const a = deg * Math.PI / 180, px = cx + rx * Math.cos(a), py = cy + ry * Math.sin(a);
+  let nx = Math.cos(a) / rx, ny = Math.sin(a) / ry; const n = Math.hypot(nx, ny); nx /= n; ny /= n;
+  return sh(`M${f1(px - ny * 10)} ${f1(py + nx * 10)} L${f1(px + nx * len)} ${f1(py + ny * len)} L${f1(px + ny * 10)} ${f1(py - nx * 10)} Z`, fill, stroke, 2.5);
+}
+function shadeMoon(cx, cy, rx, ry, fill) { // soft shadow along the lower right edge of a snowball
+  const p = a => [f1(cx + rx * Math.cos(a * Math.PI / 180)), f1(cy + ry * Math.sin(a * Math.PI / 180))], [x1, y1] = p(-50), [x2, y2] = p(140);
+  return sh(`M${x1} ${y1} A${rx} ${ry} 0 1 1 ${x2} ${y2} Q${f1(cx + rx * .6)} ${f1(cy + ry * .6)} ${x1} ${y1} Z`, fill, null);
+}
+function friendBase(ch) {
+  const S = ch.skin, SO = ch.skinO, H = ch.hair, HO = ch.hairO, pupil = '#1A1830';
+  const eye = (x, y) => ell(x, y, 9, 11.5, ch.eye) + ell(x, y + 2, 5.5, 7, pupil) + circ(x + 3.2, y - 4, 3.4, '#fff') + circ(x - 2.8, y + 5, 1.6, '#fff');
+  const blush = (y, dx = 40) => ell(150 - dx, y, 10, 6, ch.blush, null, 0, 'opacity=".4"') + ell(150 + dx, y, 10, 6, ch.blush, null, 0, 'opacity=".4"');
+  const mouth = (d, open, ink) => line(d, ink, 3, 'class="m-smile"') + sh(open, '#E4577E', ink, 2, 'class="m-open"');
+  const skinArms = line(ARM_PATH, SO, 20) + line(ARM_PATH, S, 14);
+  const hands = circ(98, 296, 11, S, SO) + circ(202, 296, 11, S, SO);
+  const neck = sh('M142 150 L142 196 L158 196 L158 150 Z', S, SO);
+
+  if (ch.style === 'dragon') {
+    const B = '#FFE9AE', BO = '#D9B24F', SH = '#3E9B4F', SHO = '#23683A', SP = '#FFFBEF', SPO = '#BFAE8E';
+    const spikes = [-38, 0, 38, 142, 180, 218].map(d => spikeAt(150, 250, 76, 92, d, 22, SP, SPO)).join('');
+    return {
+      hairBack: sh('M172 416 C200 424 224 414 236 392 L250 394 L242 380 C234 376 228 380 224 388 C214 404 194 408 170 404 Z', S, SO) +
+        spikes + ell(150, 250, 76, 92, SH, SHO, 4) + ell(150, 250, 67, 83, 'none', '#FFF1CC', 6) + line('M112 200 Q150 186 188 200 M100 250 L200 250 M112 300 Q150 314 188 300', SHO, 3, 'opacity=".5"') +
+        sh('M96 110 L78 72 L106 84 L100 44 L128 68 L136 32 L152 60 L168 32 L174 68 L202 44 L196 84 L224 72 L204 110 Z', H, HO),
+      legs: sh('M121 296 C119 360 123 420 123 476 L146 476 C146 420 150 360 150 300 Z M179 296 C181 360 177 420 177 476 L154 476 C154 420 150 360 150 300 Z', S, SO, 3) +
+        [132, 168].map(x => ell(x, 482, 19, 11, S, SO) + line(`M${x - 10} 486 l-3 6 M${x} 489 l0 6 M${x + 10} 486 l3 6`, SP, 4)).join(''),
+      torso: sh('M138 150 L138 196 L162 196 L162 150 Z', S, SO) + sh('M124 202 C128 190 140 186 150 186 C160 186 172 190 176 202 L180 298 Q150 314 120 298 Z', S, SO) +
+        sh('M134 206 Q150 200 166 206 L168 292 Q150 302 132 292 Z', B, BO) + line('M136 228 Q150 232 164 228 M135 250 Q150 254 165 250 M135 272 Q150 276 165 272', BO, 2),
+      arms: line(ARM_PATH, SO, 28) + line(ARM_PATH, S, 22) +
+        [[101, 280, -15], [199, 280, 15]].map(([x, y, r]) => `<g transform="rotate(${r} ${x} ${y})">${ell(x, y, 13, 6, '#3D3547')}${sh(`M${x - 9} ${y - 4} l-3 -8 l6 5 Z M${x + 9} ${y - 4} l3 -8 l-6 5 Z`, SP, SPO, 1.2)}</g>`).join(''),
+      hands: circ(98, 296, 12, S, SO) + circ(202, 296, 12, S, SO),
+      face: sh('M110 80 C98 68 86 54 82 30 C98 42 112 54 124 70 Z', SP, SPO) + sh('M190 80 C202 68 214 54 218 30 C202 42 188 54 176 70 Z', SP, SPO) +
+        ell(150, 118, 60, 56, S, SO) + ell(150, 150, 36, 23, B, BO, 2.5) + ell(140, 141, 3.4, 2.4, SHO) + ell(160, 141, 3.4, 2.4, SHO) +
+        `<g class="eyes">${eye(125, 120)}${eye(175, 120)}</g>` + line('M110 104 Q124 96 139 104 M161 104 Q176 96 190 104', HO, 8) + line('M110 104 Q124 96 139 104 M161 104 Q176 96 190 104', H, 4.5) +
+        blush(146, 46) + mouth('M128 156 Q150 172 172 156', 'M128 154 Q150 184 172 154 Q150 164 128 154 Z', '#6B2A2A') +
+        sh('M136 159 L140 168 L144 161 Z M164 159 L160 168 L156 161 Z', '#fff', SPO, 1.5),
+      hairFront: sh('M118 80 L124 58 L136 72 L150 50 L164 72 L176 58 L182 80 Q150 70 118 80 Z', H, HO)
+    };
+  }
+
+  if (ch.style === 'snow') {
+    const W = '#FFFFFF', WO = SO, soft = '#E6EFF9', coal = '#3D3547', twig = ch.hair;
+    return {
+      hairBack: line('M140 68 L130 30 M134 46 L122 40 M150 64 L152 22 M151 40 L161 32 M160 68 L172 34 M167 50 L179 48', twig, 5) +
+        ell(150, 410, 76, 84, W, WO, 4) + shadeMoon(150, 410, 74, 82, soft) + ell(120, 370, 14, 8, '#F4F9FF') +
+        ell(150, 248, 51, 78, W, WO, 4) + shadeMoon(150, 248, 49, 76, soft),
+      legs: ell(132, 488, 17, 9, W, WO, 3) + ell(168, 488, 17, 9, W, WO, 3),
+      torso: [[214, 5.5], [244, 6], [276, 6.5]].map(([y, r]) => circ(150, y, r, coal) + circ(148, y - 2, 1.6, '#8C8699')).join(''),
+      arms: line('M104 214 L84 254 L96 290 M196 214 L216 254 L204 290', twig, 6) + line('M88 247 L74 238 M212 247 L226 238', twig, 4),
+      hands: line('M96 290 L86 302 M96 290 L94 306 M96 290 L104 303 M204 290 L214 302 M204 290 L206 306 M204 290 L196 303', twig, 4),
+      face: ell(150, 118, 58, 56, W, WO, 4) + shadeMoon(150, 118, 56, 54, soft) +
+        `<g class="eyes">${eye(128, 126)}${eye(172, 126)}</g>` + line('M117 108 Q128 102 139 107 M161 107 Q172 102 183 108', coal, 3.5) + blush(150) +
+        sh('M149 138 C160 136 178 142 192 150 C178 153 161 153 150 151 C145 147 145 142 149 138 Z', '#FF9F43', '#D9761E', 2.5) + line('M162 140 L160 150 M173 144 L171 151', '#D9761E', 1.8) +
+        mouth('M134 160 Q150 172 166 160', 'M133 158 Q150 182 167 158 Q150 164 133 158 Z', coal),
+      hairFront: ''
+    };
+  }
+
+  // the brothers: short hair, round nose, moustache, T-shirt and shorts
+  const shirt = ch.shirt, shirtO = OUT(shirt), luca = ch.style === 'luca';
+  const tee = sh('M121 262 L179 262 L182 330 L155 334 L150 304 L145 334 L118 330 Z', ch.shorts, OUT(ch.shorts)) + sh(TEE, shirt, shirtO);
+  const tache = luca ? 'M150 154 C143 150 131 151 124 157 C119 162 124 166 130 162 C137 159 144 161 150 158 C156 161 163 159 170 162 C176 166 181 162 176 157 C169 151 157 150 150 154 Z'
+    : 'M150 152 C141 147 127 148 122 156 C119 163 127 168 134 163 C139 167 146 165 150 160 C154 165 161 167 166 163 C173 168 181 163 178 156 C173 148 159 147 150 152 Z';
+  const side = 'M96 112 C95 122 97 132 102 140 C103 130 104 120 106 112 Z M204 112 C205 122 203 132 198 140 C197 130 196 120 194 112 Z';
+  return {
+    hairBack: sh('M92 134 C86 78 116 52 150 52 C184 52 214 78 208 134 Q205 148 198 152 L102 152 Q95 148 92 134 Z', H, HO),
+    legs: line(LEGS, SO, 24) + line(LEGS, S, 18),
+    torso: neck + tee, torsoBare: neck + sh('M128 202 C132 191 142 188 150 188 C158 188 168 191 172 202 L172 266 Q150 272 128 266 Z', S, SO),
+    arms: skinArms + sh(SLEEVES, shirt, shirtO, 2.5), armsBare: skinArms,
+    hands,
+    face: ell(92, 134, 9, 13, S, SO) + ell(208, 134, 9, 13, S, SO) + line('M90 128 Q95 134 92 141 M210 128 Q205 134 208 141', SO, 2) + ell(150, 118, 58, 56, S, SO) +
+      `<g class="eyes">${eye(128, 128)}${eye(172, 128)}</g>` + line('M117 110 Q128 103 139 109 M161 109 Q172 103 183 110', HO, 5) + blush(152) +
+      sh(tache, H, HO, 2.5) + (luca ? ell(150, 145, 9, 10, shade(S, -.05), SO, 2.5) : ell(150, 146, 11.5, 9, shade(S, -.05), SO, 2.5)) + circ(146, 142, 2.6, '#fff', null, 0, 'opacity=".7"') +
+      mouth('M142 169 Q150 174 158 169', 'M142 167 Q150 180 158 167 Q150 170 142 167 Z', '#9C3B3B'),
+    hairFront: sh('M94 112 C92 78 120 60 150 60 C180 60 208 78 206 112 C200 100 190 94 180 92 C176 102 164 104 156 96 C151 104 139 106 133 98 C124 104 111 102 106 96 C100 100 96 106 94 112 Z', H, HO) +
+      sh(side, H, HO) + (luca ? sh('M148 62 C144 48 150 38 162 34 C156 44 158 52 164 60 Z', H, HO) : '') + line('M118 74 Q134 66 150 66', ch.hairL, 4, 'opacity=".8"')
+  };
+}
+
 const baseCache = {};
 function base(ch) {
   if (baseCache[ch.id]) return baseCache[ch.id];
+  if (ch.kind) return (baseCache[ch.id] = friendBase(ch));
   const S = ch.skin, SO = ch.skinO, hair = hairFor(ch), pupil = '#1A1830';
   const eye = x => ell(x, 134, 9.5, 12.5, ch.eye) + ell(x, 136, 5.5, 7.5, pupil) + circ(x + 3.5, 129, 3.8, '#fff') + circ(x - 3, 140, 1.8, '#fff');
   const freckles = ch.freckles ? [[106, 146], [113, 151], [119, 145], [181, 145], [187, 151], [194, 146]].map(([x, y]) => circ(x, y, 1.8, shade(S, -.3))).join('') : '';
@@ -969,12 +1077,29 @@ function petDragon(c) {
     sh('M-14 -86 L-19 -103 L-5 -91 Z', B, BO, 2) + sh('M14 -86 L19 -103 L5 -91 Z', B, BO, 2) + circ(0, -66, 25, c, o) + petFace(isDark(c)) +
     circ(-4, -58, 1.6, shade(c, -.4)) + circ(4, -58, 1.6, shade(c, -.4)) + line('M-7 -53 Q0 -48 7 -53', '#2B2238', 1.6) + sh('M3 -51.5 L5 -48 L7 -52 Z', '#fff', null);
 }
+function petChick(c) {
+  const o = OUT(c), l = shade(c, .35), beak = '#FF9F43', bO = '#D9761E';
+  return line('M-9 -4 L-9 -14 M9 -4 L9 -14 M-16 -3 L-2 -3 M2 -3 L16 -3', bO, 3.5) + ell(0, -36, 28, 28, c, o) +
+    ell(-25, -38, 8, 14, l, o, 2.5, 'transform="rotate(25 -25 -38)"') + ell(25, -38, 8, 14, l, o, 2.5, 'transform="rotate(-25 25 -38)"') +
+    circ(0, -72, 21, c, o) + sh('M-3 -90 C-8 -104 2 -106 1 -94 C6 -104 14 -98 6 -90 Z', c, o, 2) + petFace(isDark(c), -74) + sh('M-6 -66 L0 -60 L6 -66 L0 -70 Z', beak, bO, 1.5);
+}
+function petParrot(c) {
+  const o = OUT(c), wing = c === COLORS.blau.hex ? '#FFD93D' : '#4D9DE0', wO = OUT(wing), tail = c === COLORS.gelb.hex ? '#F2545B' : '#FFD93D', beak = '#FFF1CC', bO = '#BFA36A';
+  return sh('M-8 -22 L-16 14 L-5 9 L0 18 L5 9 L16 14 L8 -22 Z', tail, OUT(tail), 2) + line('M-8 -2 L-8 -12 M8 -2 L8 -12 M-14 -2 L-2 -2 M2 -2 L14 -2', '#8A93A6', 3.5) +
+    ell(0, -42, 23, 31, c, o) + ell(0, -36, 13, 19, shade(c, .35)) +
+    ell(-21, -42, 9, 22, wing, wO, 2.5, 'transform="rotate(14 -21 -42)"') + ell(21, -42, 9, 22, wing, wO, 2.5, 'transform="rotate(-14 21 -42)"') +
+    sh('M-6 -94 C-10 -110 2 -114 2 -100 C6 -112 18 -108 8 -94 Z', tail, OUT(tail), 2) + circ(0, -78, 22, c, o) +
+    ell(-10, -80, 8, 9, '#FFFFFF') + ell(10, -80, 8, 9, '#FFFFFF') + petFace(false, -80) +
+    sh('M-8 -72 Q0 -78 8 -72 Q8 -60 0 -54 Q2 -62 -2 -66 Q-6 -66 -8 -72 Z', beak, bO, 2);
+}
 kind('cat', 'tier', 'Kätzchen', 'n', ['orange', 'silber', 'schwarz', 'weiss', 'braun'], [], PET_PV, (x, c) => ({ pet: petWrap('cat', petCat(c)) }), { sound: 'meow', call: 'Miau! Miau!' });
 kind('dog', 'tier', 'Hündchen', 'n', ['braun', 'weiss', 'schwarz', 'orange'], [], PET_PV, (x, c) => ({ pet: petWrap('dog', petDog(c)) }), { sound: 'woof', call: 'Wau wau!' });
 kind('bunny', 'tier', 'Häschen', 'n', ['weiss', 'braun', 'silber', 'rosa'], [], PET_PV, (x, c) => ({ pet: petWrap('bunny', petBunny(c)) }), { sound: 'boing', call: 'Hoppel, hoppel!' });
 kind('unicorn', 'tier', 'Einhorn', 'n', ['rosa', 'lila', 'blau', 'gelb', 'gruen'], [], PET_PV, (x, c) => ({ pet: petWrap('unicorn', petUnicorn(c)) }), { sound: 'magic', call: 'Ich bin ein Einhorn! Glitzer, glitzer!' });
 kind('dragon', 'tier', 'Drache', 'm', ['gruen', 'lila', 'rot', 'blau', 'orange'], [], PET_PV, (x, c) => ({ pet: petWrap('dragon', petDragon(c)) }), { sound: 'roar', call: 'Roaaar! Hihi, ich bin ein lieber Drache.' });
-const PET_PANEL = ['none', 'cat', 'dog', 'bunny', 'unicorn', 'dragon'];
+kind('chick', 'tier', 'Küken', 'n', ['gelb', 'orange', 'braun', 'weiss'], [], PET_PV, (x, c) => ({ pet: petWrap('chick', petChick(c)) }), { sound: 'peep', call: 'Piep, piep, piep!' });
+kind('parrot', 'tier', 'Papagei', 'm', ['rot', 'gruen', 'blau', 'gelb'], [], PET_PV, (x, c) => ({ pet: petWrap('parrot', petParrot(c)) }), { sound: 'squawk', call: 'Ahoi! Ahoi! Hallo, Pirat!' });
+const PET_PANEL = ['none', 'cat', 'dog', 'bunny', 'unicorn', 'dragon', 'chick', 'parrot'];
 
 /* ---------------- Überraschungen: unlocked with stars ---------------- */
 kind('unihorn', 'kopf', 'Einhorn-Haarreif', 'm', ['gold', 'rosa', 'lila', 'blau', 'silber'], [], '94 -6 112 98', (x, c) => { const o = OUT(c);
@@ -994,6 +1119,167 @@ kind('glitter', 'schuhe', 'Glitzerschuhe', 'pl', ['gold', 'silber', 'rosa', 'lil
 kind('cape', 'extra', 'Königsumhang', 'm', ['rot', 'lila', 'blau', 'rosa', 'gruen'], [], '40 176 220 326', (x, c) => { const o = OUT(c);
   return { back: sh('M118 196 C80 260 60 400 48 486 Q150 506 252 486 C240 400 220 260 182 196 Z', c, o) + line('M100 260 Q84 380 76 480 M200 260 Q216 380 224 480', shade(c, -.15), 3, 'opacity=".6"'),
     mid: sh('M110 198 Q150 226 190 198 Q184 180 150 180 Q116 180 110 198 Z', '#FFFFFF', '#CDBBCB') + [[124, 194], [140, 204], [160, 204], [176, 194], [150, 190]].map(([px, py]) => ell(px, py, 1.6, 3, '#2B2238')).join('') + circ(150, 214, 6, '#FFC83D', '#E0A21F', 2) }; }, { need: 25 });
+
+/* ---------------- The friends' wardrobe (Mario, Luigi, Krawumm, Flocke) ---------------- */
+// only: which kinds of character can wear an item (none = everyone)
+const BOY = ['boy'], BOYSNOW = ['boy', 'snow'];
+['gown', 'ice', 'party', 'rainbow', 'flowerdress', 'swim', 'witch', 'pumpkindress', 'tail', 'xmasdress', 'leafdress', 'starry',
+  'tiara', 'bow', 'wreath', 'starclip', 'witchhat', 'pumps', 'witchboots', 'glitter', 'wings', 'pearls'].forEach(id => { K[id].only = ['girl']; });
+const TROUSERS = 'M121 256 L179 256 L180 300 L177 462 L153 464 L151 310 L149 310 L147 464 L123 462 L120 300 Z';
+const SUIT = 'M121 196 Q150 186 179 196 L182 300 L178 464 L153 466 L151 312 L149 312 L147 466 L122 464 L118 300 Z';
+const LONG_SLEEVES = 'M126 206 Q111 248 102 282 M174 206 Q189 248 198 282';
+const longSleeves = (fill, o, w = 25) => line(LONG_SLEEVES, o, w + 5) + line(LONG_SLEEVES, fill, w);
+const cuffs = (fill, o) => ell(102, 283, 13, 7, fill, o, 2.5) + ell(198, 283, 13, 7, fill, o, 2.5);
+// princesses have no T-shirt of their own, so neutral outfits bring one
+const teeFor = (ctx, fill = '#FFFFFF') => (ctx.shirt ? { body: '', sleeves: '' } : { body: sh(TEE, fill, OUT('#FFFFFF')), sleeves: sh(SLEEVES, fill, OUT('#FFFFFF'), 2.5) });
+
+function dOveralls(ctx, c) {
+  const o = OUT(c), d = shade(c, -.12), l = shade(c, .35), tee = teeFor(ctx, ctx.pat('stripes', '#FFFFFF', 'rgba(242,84,91,.5)'));
+  let body = tee.body + sh(TROUSERS, c, o) + line('M150 266 L150 304', d, 2.5);
+  body += sh('M123 446 L147 448 L147 464 L123 462 Z M177 446 L153 448 L153 464 L177 462 Z', l, o, 2.5);
+  body += sh('M131 204 L169 204 L171 262 L129 262 Z', c, o) + sh('M139 222 L161 222 L160 240 Q150 245 140 240 Z', d, o, 2);
+  body += sh('M131 207 L126 191 L135 189 L139 206 Z M169 207 L174 191 L165 189 L161 206 Z', c, o, 2);
+  body += circ(135, 211, 4.5, '#FFD166', '#C9982E', 2) + circ(165, 211, 4.5, '#FFD166', '#C9982E', 2);
+  return { body, sleeves: tee.sleeves };
+}
+function dSuit(ctx, c) {
+  const o = OUT(c), gold = '#FFC83D', gO = '#E0A21F', W = '#F7F3EE', WO = '#CFC4B8', sash = c === COLORS.blau.hex ? '#F2545B' : '#8FD3F7';
+  let body = sh(TROUSERS, W, WO) + line('M150 266 L150 304', WO, 2) + sh('M119 196 Q150 184 181 196 L185 300 Q150 312 115 300 Z', c, o);
+  body += line('M150 200 L150 304', o, 2.5) + [222, 246, 270].map(y => circ(141, y, 3.8, gold, gO, 1.5) + circ(159, y, 3.8, gold, gO, 1.5)).join('');
+  body += sh('M168 194 L180 202 L131 300 L119 294 Z', sash, OUT(sash), 2.5) + sh('M136 188 L164 188 L162 200 L138 200 Z', gold, gO, 2);
+  const epaulette = x => ell(x, 201, 16, 8, gold, gO, 2) + line(`M${x - 12} 207 L${x - 13} 215 M${x - 6} 208 L${x - 6} 217 M${x} 209 L${x} 218 M${x + 6} 208 L${x + 6} 217 M${x + 12} 207 L${x + 13} 215`, gO, 2);
+  return { body, sleeves: longSleeves(c, o) + cuffs(gold, gO) + epaulette(120) + epaulette(180) };
+}
+function dKnight(ctx, c) {
+  const M = '#DCE3EC', MO = '#8C9AAE', ML = '#F4F7FB', o = OUT(c), gold = '#FFC83D', gO = '#E0A21F';
+  let body = sh(TROUSERS, M, MO) + ell(135, 382, 12, 10, ML, MO, 2.5) + ell(165, 382, 12, 10, ML, MO, 2.5) + line('M124 420 L146 421 M154 421 L176 420', MO, 2);
+  body += sh('M119 196 Q150 184 181 196 L183 292 Q150 302 117 292 Z', M, MO);
+  body += sh('M128 196 Q150 206 172 196 L176 332 L150 344 L124 332 Z', c, o) + sh(starPath(150, 250, 17, 7.5), gold, gO, 2.5);
+  body += sh('M122 280 L178 280 L178 291 L122 291 Z', '#8A5A3C', '#5E3B24', 2) + `<rect x="144" y="279" width="12" height="13" rx="2" fill="none" stroke="${gold}" stroke-width="3"/>`;
+  const plate = x => ell(x, 204, 18, 13, ML, MO, 2.5) + line(`M${x - 13} 210 Q${x} 216 ${x + 13} 210`, MO, 2);
+  return { body, sleeves: longSleeves(M, MO, 23) + line('M117 236 L131 240 M110 258 L124 262 M183 236 L169 240 M190 258 L176 262', MO, 2) + cuffs(ML, MO) + plate(120) + plate(180) };
+}
+function dShirt(ctx, c, pattern, acc, open) {
+  const o = OUT(c), fill = ctx.pat(pattern, c, acc), bow = c === COLORS.gelb.hex ? '#FF5FA2' : '#FFD93D', W = '#FFFFFF', WO = OUT(W);
+  let body = sh('M120 196 Q150 186 180 196 L183 284 Q150 294 117 284 Z', fill, o) + line('M150 204 L150 290', o, 2);
+  body += [228, 250, 272].map(y => circ(156, y, 2.6, W, o, 1.2)).join('');
+  if (open) body += sh('M138 190 L150 212 L142 214 L130 196 Z M162 190 L150 212 L158 214 L170 196 Z', shade(c, -.1), o, 2);
+  else body += sh('M138 190 L150 202 L136 208 Z M162 190 L150 202 L164 208 Z', W, WO, 2) + sh('M150 200 L136 192 L136 208 Z M150 200 L164 192 L164 208 Z', bow, OUT(bow), 2) + circ(150, 200, 4.5, bow, OUT(bow), 2);
+  return { body, sleeves: sh(SLEEVES, fill, o, 2.5) };
+}
+function dTrunks(ctx, c) {
+  const o = OUT(c);
+  const body = sh('M119 256 L181 256 L185 330 L155 336 L150 304 L145 336 L115 330 Z', c, o) + line('M122 266 L118 328 M178 266 L182 328', '#FFFFFF', 5, 'opacity=".85"') +
+    sh('M119 256 L181 256 L181 267 L119 267 Z', shade(c, -.12), o, 2) + line('M150 267 L145 280 M150 267 L155 280', '#FFFFFF', 2.5);
+  return { body, bare: true };
+}
+function dWetsuit(ctx, c) {
+  const o = OUT(c), dark = '#2F3A57', dO = '#1B2236';
+  let body = sh(SUIT, dark, dO) + sh('M121 196 Q150 186 179 196 L180 238 Q150 248 120 238 Z', c, o, 2.5);
+  body += line('M125 300 L126 458 M175 300 L174 458', c, 5) + line('M150 194 L150 282', '#9FB0C8', 2.5) + circ(150, 284, 3.5, '#9FB0C8');
+  return { body, sleeves: longSleeves(dark, dO) + line('M118 232 L110 256 M182 232 L190 256', c, 5) + cuffs(c, o) };
+}
+function dSnowsuit(ctx, c) {
+  const o = OUT(c), l = shade(c, .3), q = shade(c, -.15), fur = '#FFFBF4', furO = '#D9CBBE';
+  let body = sh('M116 196 Q150 184 184 196 L189 300 L182 462 L152 466 L151 318 L149 318 L148 466 L118 462 L111 300 Z', c, o);
+  body += line('M117 236 Q150 244 183 236 M115 276 Q150 284 185 276 M121 342 L147 342 M153 342 L179 342 M121 404 L147 404 M153 404 L179 404', q, 2.5, 'opacity=".7"');
+  body += line('M150 202 L150 300', o, 2.5) + sh('M119 448 L148 450 L148 466 L118 462 Z M181 448 L152 450 L152 466 L182 462 Z', l, o, 2) + ell(150, 194, 31, 10, fur, furO);
+  return { body, sleeves: longSleeves(c, o, 31) + line('M119 232 L133 238 M112 256 L126 262 M181 232 L167 238 M188 256 L174 262', q, 2.5) + cuffs(l, o) };
+}
+function dSweater(ctx, c) {
+  const o = OUT(c), W = '#FFFFFF', pants = '#4A5A7A', rib = shade(c, -.14);
+  const zig = y => `M121 ${y} L128 ${y + 7} L135 ${y} L142 ${y + 7} L150 ${y} L158 ${y + 7} L165 ${y} L172 ${y + 7} L179 ${y}`;
+  let body = sh(TROUSERS, pants, OUT(pants)) + sh('M119 196 Q150 186 181 196 L184 290 Q150 300 116 290 Z', c, o);
+  body += line(zig(212) + zig(266), W, 3) + flakeLines(150, 240, 13, W) + circ(128, 240, 3, W) + circ(172, 240, 3, W);
+  body += sh('M116 282 Q150 292 184 282 L184 293 Q150 303 116 293 Z', rib, o, 2) + ell(150, 192, 16, 6, rib, o, 2);
+  return { body, sleeves: longSleeves(c, o) + line('M114 238 L108 254 M186 238 L192 254', W, 3) + cuffs(rib, o) };
+}
+function dWizard(ctx, c) {
+  const o = OUT(c), fill = ctx.pat('stars', c, '#FFE680'), rope = '#FFD166';
+  let body = sh('M121 196 Q150 186 179 196 C188 280 198 380 204 464 Q150 476 96 464 C102 380 112 280 121 196 Z', fill, o);
+  body += line('M150 204 L150 470', o, 2.5) + line('M121 282 Q150 292 179 282', rope, 5) + line('M140 288 L136 318 M146 290 L144 322', rope, 3.5);
+  body += sh('M130 190 L150 214 L170 190 L172 184 Q150 196 128 184 Z', shade(c, -.15), o, 2);
+  const bell = 'M127 204 Q113 238 99 268 L84 290 Q104 300 118 288 Q126 250 136 214 Z M173 204 Q187 238 201 268 L216 290 Q196 300 182 288 Q174 250 164 214 Z';
+  return { body, sleeves: sh(bell, fill, o) };
+}
+function dPirate(ctx, c) {
+  const o = OUT(c), stripes = ctx.pat('stripes', '#FFFFFF', 'rgba(242,84,91,.9)'), sO = '#CDBBCB', pants = '#6B5A4A', red = '#F2545B', gold = '#FFC83D';
+  let body = sh('M121 258 L179 258 L180 300 L178 420 L170 428 L163 420 L155 428 L151 312 L149 312 L145 428 L137 420 L130 428 L122 420 L120 300 Z', pants, OUT(pants));
+  body += sh('M120 196 Q150 186 180 196 L183 286 Q150 296 117 286 Z', stripes, sO);
+  body += sh('M120 196 Q128 191 137 191 L145 290 L117 286 Z M180 196 Q172 191 163 191 L155 290 L183 286 Z', c, o) + circ(139, 232, 3.2, gold, '#E0A21F', 1.2) + circ(161, 232, 3.2, gold, '#E0A21F', 1.2);
+  body += sh('M117 272 Q150 284 183 272 L184 288 Q150 300 116 288 Z', red, OUT(red), 2) + sh('M126 280 L114 318 L124 316 L130 290 Z M128 284 L128 322 L136 318 Z', red, OUT(red), 2) + circ(128, 282, 6, red, OUT(red), 2);
+  return { body, sleeves: line(LONG_SLEEVES, sO, 28) + line(LONG_SLEEVES, stripes, 23) + cuffs('#FFFFFF', sO) };
+}
+function dHero(ctx, c) {
+  const o = OUT(c), acc = c === COLORS.gelb.hex || c === COLORS.orange.hex ? '#F2545B' : '#FFD93D', aO = OUT(acc), cape = c === COLORS.rot.hex ? '#4D9DE0' : '#F2545B';
+  let body = sh(SUIT, c, o) + circ(150, 232, 18, acc, aO, 2.5) + sh(starPath(150, 233, 12.5, 5.5), c, o, 2);
+  body += sh('M119 280 Q150 290 181 280 L182 293 Q150 303 118 293 Z', acc, aO, 2) + `<rect x="143" y="281" width="14" height="14" rx="3" fill="${c}" stroke="${aO}" stroke-width="2"/>`;
+  return { body, sleeves: longSleeves(c, o) + cuffs(acc, aO), back: sh('M122 196 C108 262 100 336 96 394 Q150 410 204 394 C200 336 192 262 178 196 Z', cape, OUT(cape)) };
+}
+kind('overalls', 'kleid', 'Latzhose', 'f', ['blau', 'rot', 'gruen', 'gelb', 'lila', 'rosa', 'braun'], ['garten', 'bauernhof'], '98 182 104 290', (x, c) => dOveralls(x, c));
+kind('suit', 'kleid', 'Prinzenanzug', 'm', ['blau', 'rot', 'lila', 'gruen', 'weiss'], ['schloss'], '92 180 116 290', (x, c) => dSuit(x, c), { only: BOY });
+kind('knight', 'kleid', 'Ritterrüstung', 'f', ['rot', 'blau', 'gruen', 'lila', 'gelb'], ['schloss'], '92 180 116 290', (x, c) => dKnight(x, c), { only: BOY });
+kind('partyshirt', 'kleid', 'Partyhemd', 'n', ALL, ['geburtstag'], '92 180 116 124', (x, c) => dShirt(x, c, 'dots', 'rgba(255,255,255,.85)'), { only: BOY });
+kind('hawaii', 'kleid', 'Hawaiihemd', 'n', ['blau', 'rot', 'gelb', 'gruen', 'orange', 'rosa', 'lila'], ['strand'], '92 180 116 124', (x, c) => dShirt(x, c, 'flowers', '#FFFFFF', true), { only: BOY });
+kind('trunks', 'kleid', 'Badehose', 'f', ALL, ['strand', 'meer'], '108 248 84 96', (x, c) => dTrunks(x, c), { only: BOY });
+kind('wetsuit', 'kleid', 'Taucheranzug', 'm', ['blau', 'gelb', 'orange', 'gruen', 'rot', 'rosa'], ['meer'], '92 180 116 292', (x, c) => dWetsuit(x, c), { only: BOY });
+kind('snowsuit', 'kleid', 'Schneeanzug', 'm', ['rot', 'blau', 'gruen', 'gelb', 'lila', 'orange'], ['winter'], '90 180 120 292', (x, c) => dSnowsuit(x, c), { only: BOY });
+kind('xmassweater', 'kleid', 'Weihnachtspulli', 'm', ['rot', 'gruen', 'blau', 'lila'], ['weihnachten'], '92 180 116 290', (x, c) => dSweater(x, c), { only: BOY });
+kind('wizard', 'kleid', 'Zauberermantel', 'm', ['blau', 'lila', 'schwarz', 'gruen', 'rot'], ['halloween'], '78 180 144 300', (x, c) => dWizard(x, c), { only: BOY });
+kind('pumpkinsuit', 'kleid', 'Kürbiskostüm', 'n', ['orange'], ['halloween'], '58 184 184 210', (x, c) => dPumpkin(x, c), { only: BOY });
+kind('pirate', 'kleid', 'Piratenkostüm', 'n', ['rot', 'blau', 'schwarz', 'lila', 'gruen', 'braun'], ['piraten'], '96 182 108 252', (x, c) => dPirate(x, c));
+kind('cap', 'kopf', 'Kappe', 'f', ['rot', 'gruen', 'blau', 'gelb', 'lila', 'orange', 'rosa', 'schwarz'], [], '84 28 132 92', (x, c) => { const o = OUT(c), d = shade(c, -.14);
+  return { head: sh('M93 100 C89 50 118 32 150 32 C182 32 211 50 207 100 Q150 90 93 100 Z', c, o) + line('M106 58 Q126 42 148 40', shade(c, .4), 4, 'opacity=".7"') +
+    sh('M90 98 Q150 86 210 98 Q213 109 203 113 Q150 102 97 113 Q87 109 90 98 Z', d, o) + circ(150, 64, 15, '#FFFFFF', OUT('#FFFFFF'), 2.5) + sh(starPath(150, 65, 10, 4.5), c, o, 1.5) }; }, { only: BOYSNOW });
+kind('wizardhat', 'kopf', 'Zaubererhut', 'm', ['blau', 'lila', 'schwarz', 'gruen', 'rot'], ['halloween'], '76 -38 150 142', (x, c) => { const o = OUT(c);
+  return { head: sh('M112 90 C124 58 138 20 152 -8 C160 -24 176 -30 190 -26 C178 -18 170 -6 170 8 C172 36 182 64 188 90 Q150 80 112 90 Z', x.pat('stars', c, '#FFE680'), o) +
+    ell(150, 92, 72, 15, c, o) + sh('M113 80 Q150 72 187 80 L188 90 Q150 82 112 90 Z', '#FFD166', '#C9982E', 2) +
+    sh('M148 30 A14 14 0 1 0 160 52 A11 11 0 1 1 148 30 Z', '#FFE680', '#E0B84A', 1.5) }; }, { only: BOYSNOW });
+kind('boots', 'schuhe', 'Stiefel', 'pl', ['braun', 'schwarz', 'rot', 'blau'], ['bauernhof'], '106 410 88 90', (x, c) => { const o = OUT(c), l = shade(c, .25);
+  return { shoes: bothFeet(f => sh(`M${f - 14} 424 L${f + 14} 424 L${f + 15} 482 C${f + 18} 495 ${f - 18} 495 ${f - 15} 482 Z`, c, o) +
+    sh(`M${f - 17} 414 L${f + 17} 414 L${f + 15} 432 L${f - 15} 432 Z`, l, o, 2.5) + line(`M${f - 15} 487 Q${f} 493 ${f + 15} 487`, shade(c, -.35), 3.5)) }; });
+kind('shield', 'extra', 'Schild', 'm', ['rot', 'blau', 'gruen', 'gelb', 'lila'], ['schloss'], '58 254 64 96', (x, c) => { const o = OUT(c), M = '#DCE3EC', MO = '#8C9AAE';
+  return { front: sh('M64 262 L116 262 L116 294 C116 322 98 340 90 346 C82 340 64 322 64 294 Z', M, MO, 3) + sh('M70 268 L110 268 L110 294 C110 316 96 332 90 337 C84 332 70 316 70 294 Z', c, o, 2) +
+    sh(heartPath(90, 296, 11), '#FFFFFF', OUT('#FFFFFF'), 2) }; });
+kind('hero', 'kleid', 'Heldenanzug', 'm', ['blau', 'rot', 'gruen', 'lila', 'orange'], [], '88 180 124 292', (x, c) => dHero(x, c), { need: 10, only: BOY });
+kind('icecrown', 'kopf', 'Eiskrone', 'f', ['blau', 'weiss', 'lila', 'silber'], [], '100 6 100 84', (x, c) => { const o = OUT(c), l = c === '#FFFFFF' ? '#CDEBFF' : shade(c, .55);
+  const spike = (px, h, w) => sh(`M${px - w} 80 L${px} ${80 - h} L${px + w} 80 Z`, l, o, 2.5) + line(`M${px} ${82 - h * .8} L${px} 76`, '#FFFFFF', 2, 'opacity=".8"');
+  return { head: spike(116, 34, 10) + spike(184, 34, 10) + spike(133, 50, 11) + spike(167, 50, 11) + spike(150, 68, 12) + sh('M108 76 Q150 88 192 76 L192 88 Q150 98 108 88 Z', c, o, 2.5) +
+    `<g class="tw">${sparkle(150, 16, 6)}${sparkle(122, 40, 4)}${sparkle(178, 40, 4)}</g>` }; }, { need: 10, only: ['snow'] });
+kind('rocketshoes', 'schuhe', 'Raketenschuhe', 'pl', ['rot', 'blau', 'gruen', 'lila', 'orange'], [], '88 456 124 44', (x, c) => { const o = OUT(c);
+  return { shoes: bothFeet((f, dir) => `<g class="flicker">${sh(`M${f + dir * 16} 486 Q${f + dir * 36} 482 ${f + dir * 42} 489 Q${f + dir * 36} 496 ${f + dir * 16} 492 Z`, '#FFB43D', null)}${sh(`M${f + dir * 16} 487 Q${f + dir * 28} 486 ${f + dir * 32} 489 Q${f + dir * 28} 492 ${f + dir * 16} 491 Z`, '#FFE680', null)}</g>` +
+    sh(`M${f - 16} 488 C${f - 17} 470 ${f + 15} 468 ${f + 17} 484 L${f + 17} 489 Z`, c, o) + sh(`M${f - 18} 486 L${f + 18} 486 L${f + 18} 491 Q${f} 497 ${f - 18} 491 Z`, '#fff', '#C9BCC6', 2.5) +
+    sh(`M${f - 4} 470 L${f + 3} 478 L${f - 1} 478 L${f + 4} 486 L${f - 5} 476 L${f - 1} 476 Z`, '#FFD93D', '#E0A800', 1.2)) }; }, { need: 20, only: BOYSNOW });
+
+/* ---------------- Bauernhof ---------------- */
+kind('strawhat', 'kopf', 'Strohhut', 'm', [], ['bauernhof', 'garten'], '44 24 212 80', () => { const S = '#F2D27A', SO = '#C9A04A', band = '#F2545B';
+  return { head: ell(150, 84, 104, 22, S, SO) + line('M62 86 Q150 106 238 86', SO, 2, 'opacity=".6"') + sh('M106 84 C104 34 196 34 194 84 Z', S, SO) +
+    sh('M106 70 Q150 80 194 70 L194 84 Q150 94 106 84 Z', band, OUT(band), 2) + line('M120 50 L126 64 M136 44 L140 62 M152 42 L152 60 M168 44 L164 62 M182 52 L176 64', SO, 1.6, 'opacity=".7"') +
+    line('M70 82 L84 88 M96 92 L112 96 M188 96 L204 92 M216 88 L230 82', SO, 1.6, 'opacity=".7"') }; });
+kind('eggbasket', 'extra', 'Eierkorb', 'm', [], ['bauernhof'], '188 252 78 94', () => { const B = '#C98A4B', BO = '#8A5A2B', E = '#FFF6E6', EO = '#D9C7A6';
+  return { front: line('M200 300 Q226 254 252 300', BO, 8) + line('M200 300 Q226 254 252 300', B, 4.5) +
+    ell(212, 294, 9, 12, E, EO, 2) + ell(226, 290, 9, 12, '#FFE0B8', EO, 2) + ell(240, 294, 9, 12, E, EO, 2) +
+    sh('M194 298 L258 298 L250 334 Q226 342 202 334 Z', B, BO) + line('M198 310 L254 310 M200 322 L252 322 M214 300 L216 336 M226 300 L226 338 M238 300 L236 336', BO, 1.8, 'opacity=".7"') }; });
+kind('milkcan', 'extra', 'Milchkanne', 'f', ['silber', 'blau', 'rot', 'gruen'], ['bauernhof'], '186 252 74 104', (x, c) => { const o = OUT(c), l = shade(c, .35);
+  return { front: line('M206 300 Q194 310 206 322', o, 5) + sh('M206 292 L242 292 L246 350 Q224 358 202 350 Z', c, o) + sh('M211 272 L237 272 L242 292 L206 292 Z', l, o, 2.5) +
+    ell(224, 272, 15, 5, c, o, 2.5) + `<rect x="218" y="260" width="12" height="9" rx="3" fill="${l}" stroke="${o}" stroke-width="2"/>` + line('M210 306 L210 344', '#FFFFFF', 4, 'opacity=".6"') }; });
+
+/* ---------------- Piraten ---------------- */
+kind('piratehat', 'kopf', 'Piratenhut', 'm', ['schwarz', 'braun', 'rot', 'blau', 'lila'], ['piraten'], '66 20 168 82', (x, c) => { const o = OUT(c), W = '#FFFFFF';
+  return { head: sh('M104 86 C102 40 198 40 196 86 Z', c, o) + sh('M70 94 C84 60 118 42 150 42 C182 42 216 60 230 94 C204 80 180 82 150 92 C120 82 96 80 70 94 Z', c, o) +
+    line('M74 90 C98 74 124 78 150 88 C176 78 202 74 226 90', '#FFC83D', 3.5) +
+    line('M137 52 L163 76 M163 52 L137 76', W, 4.5) + circ(150, 60, 9.5, W) + `<rect x="144" y="64" width="12" height="7" rx="2" fill="${W}"/>` + circ(146.5, 59, 2.6, c) + circ(153.5, 59, 2.6, c) }; });
+kind('bandana', 'kopf', 'Kopftuch', 'n', ['rot', 'blau', 'gruen', 'lila', 'gelb', 'schwarz'], ['piraten'], '84 40 150 100', (x, c) => { const o = OUT(c), fill = x.pat('dots', c, 'rgba(255,255,255,.9)');
+  return { head: sh('M206 94 L232 116 L222 124 Z M204 98 L216 132 L206 134 Z', fill, o, 2.5) + sh('M90 110 C86 62 118 44 150 44 C182 44 214 62 210 110 Q150 94 90 110 Z', fill, o) + circ(208, 96, 8, c, o, 2.5) }; });
+kind('telescope', 'extra', 'Fernrohr', 'n', ['gold', 'braun', 'silber'], ['piraten'], '188 190 86 116', (x, c) => { const o = OUT(c), l = shade(c, .35);
+  return { front: `<g transform="rotate(30 204 296)"><rect x="196" y="236" width="16" height="64" rx="4" fill="${c}" stroke="${o}" stroke-width="2.5"/>` +
+    `<rect x="193" y="206" width="22" height="34" rx="4" fill="${l}" stroke="${o}" stroke-width="2.5"/><rect x="190" y="196" width="28" height="13" rx="4" fill="${c}" stroke="${o}" stroke-width="2.5"/>` +
+    ell(204, 196, 14, 4, '#BDEBFF', o, 2) + `</g>` }; });
+kind('map', 'extra', 'Schatzkarte', 'f', [], ['piraten'], '50 252 82 76', () => { const P = '#F6E3B4', PO = '#C9A96A';
+  return { front: sh('M60 262 L122 262 L122 318 L60 318 Z', P, PO, 2.5) + ell(60, 290, 7, 30, '#EAD19A', PO, 2.5) + ell(122, 290, 7, 30, '#EAD19A', PO, 2.5) +
+    `<path d="M74 308 Q84 284 96 296 Q104 304 106 282" fill="none" stroke="#B8322F" stroke-width="2.5" stroke-dasharray="4 4"/>` + line('M100 272 L112 284 M112 272 L100 284', '#F2545B', 4.5) +
+    sh('M68 272 Q76 266 84 272 Q80 280 70 280 Z', '#8FD06C', '#5E9A3E', 1.5) }; });
+
 const SPECIALS = Object.values(K).filter(k => k.need).sort((a, b) => a.need - b.need);
 
 
@@ -1003,45 +1289,54 @@ const SPECIALS = Object.values(K).filter(k => k.need).sort((a, b) => a.need - b.
 const THEMES = [
   { id: 'schloss', name: 'Ball im Schloss', icon: 'castle', tint: '#FFE3F0',
     intro: 'Heute ist ein Ball im Schloss! Was soll ich anziehen?', fitQ: 'Was passt zum Ball im Schloss?', fitTo: 'zum Ball im Schloss',
-    wrongFrom: ['strand', 'winter', 'garten', 'weltraum', 'herbst'], counts: ['star', 'heart'],
-    panel: { kleid: ['gown', 'ice', 'party', 'rainbow'], kopf: ['none', 'crown', 'tiara', 'bow'], schuhe: ['pumps', 'sneakers'], extra: ['none', 'wand', 'wings', 'bouquet'] } },
+    wrongFrom: ['strand', 'winter', 'garten', 'weltraum', 'herbst', 'bauernhof'], counts: ['star', 'heart'],
+    panel: { kleid: ['none', 'gown', 'ice', 'party', 'rainbow', 'suit', 'knight'], kopf: ['none', 'crown', 'tiara', 'bow', 'cap'], schuhe: ['none', 'pumps', 'sneakers', 'boots'], extra: ['none', 'wand', 'wings', 'bouquet', 'shield'] } },
   { id: 'geburtstag', name: 'Geburtstag', icon: 'cake', tint: '#FFF0C7',
     intro: 'Juhu, heute ist Geburtstag! Mach mich schick für die Party!', fitQ: 'Was passt zum Geburtstag?', fitTo: 'zum Geburtstag',
     wrongFrom: ['winter', 'strand', 'meer'], counts: ['candle', 'balloon', 'gift'],
-    panel: { kleid: ['party', 'rainbow', 'gown', 'flowerdress'], kopf: ['none', 'partyhat', 'crown', 'bow'], schuhe: ['pumps', 'sneakers'], extra: ['none', 'balloon', 'gift', 'wand'] } },
+    panel: { kleid: ['none', 'party', 'rainbow', 'gown', 'flowerdress', 'partyshirt', 'suit', 'overalls'], kopf: ['none', 'partyhat', 'crown', 'bow', 'cap'], schuhe: ['none', 'pumps', 'sneakers', 'boots'], extra: ['none', 'balloon', 'gift', 'wand'] } },
   { id: 'halloween', name: 'Halloween', icon: 'pumpkin', tint: '#E9DDFF',
     intro: 'Buh! Heute ist Halloween. Als was verkleide ich mich?', fitQ: 'Was passt zu Halloween?', fitTo: 'zu Halloween',
     wrongFrom: ['strand', 'garten'], counts: ['pumpkin', 'bat'],
-    panel: { kleid: ['witch', 'pumpkindress', 'party', 'gown'], kopf: ['none', 'witchhat', 'catears', 'crown'], schuhe: ['witchboots', 'pumps', 'sneakers'], extra: ['none', 'bucket', 'broom', 'wand'] } },
+    panel: { kleid: ['none', 'witch', 'pumpkindress', 'party', 'gown', 'wizard', 'pumpkinsuit'], kopf: ['none', 'witchhat', 'catears', 'crown', 'wizardhat'], schuhe: ['none', 'witchboots', 'pumps', 'sneakers', 'boots'], extra: ['none', 'bucket', 'broom', 'wand'] } },
   { id: 'strand', name: 'Schwimmen', icon: 'sun', tint: '#D2F1FF',
     intro: 'Die Sonne scheint! Wir gehen schwimmen. Was ziehe ich an?', fitQ: 'Was passt an den Strand?', fitTo: 'an den Strand',
     wrongFrom: ['winter', 'weihnachten', 'herbst'], counts: ['shell', 'fish'],
-    panel: { kleid: ['swim', 'party', 'flowerdress'], kopf: ['none', 'sunhat', 'goggles', 'bow'], schuhe: ['flipflops', 'sneakers'], extra: ['none', 'ring', 'ball', 'sunglasses'] } },
+    panel: { kleid: ['none', 'swim', 'party', 'flowerdress', 'trunks', 'hawaii'], kopf: ['none', 'sunhat', 'goggles', 'bow', 'cap'], schuhe: ['none', 'flipflops', 'sneakers'], extra: ['none', 'ring', 'ball', 'sunglasses'] } },
   { id: 'meer', name: 'Meerjungfrau', icon: 'starfish', tint: '#CFF3F7',
     intro: 'Blubb, blubb! Wir tauchen ins Meer zu den Fischen.', fitQ: 'Was passt unter Wasser?', fitTo: 'unter Wasser',
-    wrongFrom: ['winter', 'weihnachten', 'halloween'], counts: ['fish', 'shell', 'starfish'],
-    panel: { kleid: ['tail', 'swim', 'gown'], kopf: ['none', 'shellcrown', 'starclip', 'goggles'], schuhe: ['flippers', 'flipflops'], extra: ['none', 'pearls', 'shell', 'ring'] } },
+    wrongFrom: ['winter', 'weihnachten', 'halloween', 'bauernhof'], counts: ['fish', 'shell', 'starfish'],
+    panel: { kleid: ['none', 'tail', 'swim', 'gown', 'trunks', 'wetsuit'], kopf: ['none', 'shellcrown', 'starclip', 'goggles'], schuhe: ['none', 'flippers', 'flipflops'], extra: ['none', 'pearls', 'shell', 'ring'] } },
   { id: 'winter', name: 'Schnee', icon: 'snowman', tint: '#E1F0FF',
     intro: 'Brrr, es schneit! Was ziehe ich an, damit mir nicht kalt ist?', fitQ: 'Was brauche ich im Schnee?', fitTo: 'in den Schnee',
     wrongFrom: ['strand', 'meer'], counts: ['flake', 'snowman'],
-    panel: { kleid: ['coat', 'ice', 'gown'], kopf: ['none', 'beanie', 'earmuffs', 'crown'], schuhe: ['winterboots', 'pumps'], extra: ['none', 'scarf', 'mittens', 'wand'] } },
+    panel: { kleid: ['none', 'coat', 'ice', 'gown', 'snowsuit'], kopf: ['none', 'beanie', 'earmuffs', 'crown'], schuhe: ['none', 'winterboots', 'pumps', 'boots'], extra: ['none', 'scarf', 'mittens', 'wand'] } },
   { id: 'weihnachten', name: 'Weihnachten', icon: 'xmastree', tint: '#FFE0DC',
     intro: 'Ho ho ho! Bald ist Weihnachten. Mach mich festlich!', fitQ: 'Was passt zu Weihnachten?', fitTo: 'zu Weihnachten',
     wrongFrom: ['strand', 'meer'], counts: ['ornament', 'gift', 'star'],
-    panel: { kleid: ['xmasdress', 'coat', 'gown'], kopf: ['none', 'xmashat', 'antlers', 'crown'], schuhe: ['winterboots', 'pumps'], extra: ['none', 'candycane', 'gift', 'mittens'] } },
+    panel: { kleid: ['none', 'xmasdress', 'coat', 'gown', 'xmassweater'], kopf: ['none', 'xmashat', 'antlers', 'crown'], schuhe: ['none', 'winterboots', 'pumps', 'boots'], extra: ['none', 'candycane', 'gift', 'mittens'] } },
   { id: 'garten', name: 'Garten', icon: 'flower', tint: '#DDF5D2',
     intro: 'Die Blumen blühen! Wir gehen in den Garten.', fitQ: 'Was passt in den Garten?', fitTo: 'in den Garten',
     wrongFrom: ['winter', 'halloween', 'weltraum'], counts: ['flower', 'butterfly'],
-    panel: { kleid: ['flowerdress', 'rainbow', 'party', 'swim'], kopf: ['none', 'wreath', 'sunhat', 'bow'], schuhe: ['rainboots', 'sneakers', 'pumps'], extra: ['none', 'can', 'wings', 'bouquet'] } },
+    panel: { kleid: ['none', 'flowerdress', 'rainbow', 'party', 'swim', 'overalls', 'trunks'], kopf: ['none', 'wreath', 'sunhat', 'bow', 'strawhat', 'cap'], schuhe: ['none', 'rainboots', 'sneakers', 'pumps'], extra: ['none', 'can', 'wings', 'bouquet'] } },
   { id: 'herbst', name: 'Herbst', icon: 'umbrella', tint: '#FFE9CC',
     intro: 'Es ist Herbst und es regnet! Wir springen in die Pfützen.', fitQ: 'Was passt zum Herbst?', fitTo: 'zum Herbst',
     wrongFrom: ['strand', 'meer'], counts: ['leaf', 'mushroom'],
-    panel: { kleid: ['raincoat', 'leafdress', 'party'], kopf: ['none', 'souwester', 'leafcrown', 'beanie'], schuhe: ['rainboots', 'sneakers'], extra: ['none', 'umbrella', 'lantern', 'scarf'] } },
+    panel: { kleid: ['none', 'raincoat', 'leafdress', 'party', 'overalls'], kopf: ['none', 'souwester', 'leafcrown', 'beanie'], schuhe: ['none', 'rainboots', 'sneakers'], extra: ['none', 'umbrella', 'lantern', 'scarf'] } },
   { id: 'weltraum', name: 'Weltraum', icon: 'rocket', tint: '#DCD8FF',
     intro: 'Drei, zwei, eins, los! Wir fliegen ins Weltall. Was ziehe ich an?', fitQ: 'Was brauche ich im Weltall?', fitTo: 'ins Weltall',
-    wrongFrom: ['strand', 'garten', 'meer'], counts: ['planet', 'rocket', 'star'],
-    panel: { kleid: ['astro', 'gown', 'party'], kopf: ['none', 'helmet', 'antennae', 'crown'], schuhe: ['moonboots', 'sneakers'], extra: ['none', 'jetpack', 'rocket', 'wand'] } }
+    wrongFrom: ['strand', 'garten', 'meer', 'bauernhof', 'piraten'], counts: ['planet', 'rocket', 'star'],
+    panel: { kleid: ['none', 'astro', 'gown', 'party', 'overalls'], kopf: ['none', 'helmet', 'antennae', 'crown', 'cap'], schuhe: ['none', 'moonboots', 'sneakers'], extra: ['none', 'jetpack', 'rocket', 'wand'] } }
 ];
+THEMES.push(
+  { id: 'bauernhof', name: 'Bauernhof', icon: 'barn', tint: '#E4F6D6',
+    intro: 'Kikeriki! Guten Morgen auf dem Bauernhof! Was ziehe ich an?', fitQ: 'Was passt auf den Bauernhof?', fitTo: 'auf den Bauernhof',
+    wrongFrom: ['schloss', 'meer', 'weltraum'], counts: ['egg', 'chick', 'pig'],
+    panel: { kleid: ['none', 'overalls', 'flowerdress', 'party'], kopf: ['none', 'strawhat', 'bow', 'cap'], schuhe: ['none', 'rainboots', 'boots', 'sneakers'], extra: ['none', 'eggbasket', 'milkcan', 'can'] } },
+  { id: 'piraten', name: 'Piraten', icon: 'ship', tint: '#D6EEFF',
+    intro: 'Ahoi! Wir segeln mit dem Piratenschiff zur Schatzinsel. Was ziehe ich an?', fitQ: 'Was passt zu den Piraten?', fitTo: 'zu den Piraten',
+    wrongFrom: ['winter', 'weltraum', 'weihnachten'], counts: ['coin', 'chest', 'parrot'],
+    panel: { kleid: ['none', 'pirate', 'swim', 'party', 'trunks'], kopf: ['none', 'piratehat', 'bandana', 'cap'], schuhe: ['none', 'boots', 'flipflops'], extra: ['none', 'telescope', 'map', 'ring'] } });
 THEMES.forEach(t => { t.panel.tier = PET_PANEL; });
 const THEME = Object.fromEntries(THEMES.map(t => [t.id, t]));
 
@@ -1057,17 +1352,18 @@ function phrase(k, colorKey) {
    ===================================================================== */
 const LAYERS = ['back', 'under', 'shoes', 'body', 'sleeves', 'mid', 'head', 'front', 'hands', 'pet'];
 function princessSVG(o, chId, tight) {
-  const ch = CHAR[chId] || CHARS[0], B = base(ch), ctx = makeCtx(ch), L = {}; let hideLegs = false;
+  const ch = CHAR[chId] || CHARS[0], B = base(ch), ctx = makeCtx(ch), L = {}; let hideLegs = false, bare = false;
   LAYERS.forEach(n => { L[n] = ''; });
   for (const cat of CAT_IDS) {
     const it = o[cat]; if (!it || it.k === 'none' || !K[it.k]) continue;
     const r = K[it.k].draw(ctx, hexOf(it.c));
-    for (const n in r) { if (n === 'hideLegs') hideLegs = hideLegs || r[n]; else L[n] += r[n]; }
+    for (const n in r) { if (n === 'hideLegs') hideLegs = hideLegs || r[n]; else if (n === 'bare') bare = bare || r[n]; else L[n] += r[n]; }
   }
   const legs = hideLegs ? '' : B.legs + L.shoes;
+  const [sx, sy] = ch.size || [1, 1], fit = sx === 1 && sy === 1 ? '' : ` transform="translate(150 494) scale(${sx} ${sy}) translate(-150 -494)"`;
   return `<svg class="psvg" viewBox="${tight ? '0 -50 300 560' : '-50 -50 400 560'}" aria-hidden="true" stroke-linecap="round"><defs>${ctx.defs}</defs>` +
-    ell(150, 494, 80, 11, 'rgba(60,20,50,.16)') + (L.pet ? ell(300, 494, 44, 8, 'rgba(60,20,50,.14)') : '') +
-    `<g class="p-body">${L.back}${B.hairBack}${legs}${L.under}${B.torso}${L.body}${B.arms}${L.sleeves}${L.mid}${B.face}${B.hairFront}${L.head}${L.front}${L.hands || B.hands}</g>${L.pet}</svg>`;
+    ell(150, 494, 80 * sx, 11, 'rgba(60,20,50,.16)') + (L.pet ? ell(300, 494, 44, 8, 'rgba(60,20,50,.14)') : '') +
+    `<g class="p-body"><g${fit}>${L.back}${B.hairBack}${legs}${L.under}${bare && B.torsoBare || B.torso}${L.body}${bare && B.armsBare || B.arms}${L.sleeves}${L.mid}${B.face}${B.hairFront}${L.head}${L.front}${L.hands || B.hands}</g></g>${L.pet}</svg>`;
 }
 function itemSVG(k, colorKey, chId) {
   const ctx = makeCtx(CHAR[chId]); const L = k.draw(ctx, hexOf(colorKey));
@@ -1125,7 +1421,20 @@ const ICON = {
   xmastree: () => `<rect x="43" y="80" width="14" height="14" rx="2" fill="#9C6B45"/>` + sh('M12 84 L50 44 L88 84 Z', '#3FA66B', '#2B7A4B', 3) + sh('M20 62 L50 26 L80 62 Z', '#46B474', '#2B7A4B', 3) + sh('M28 40 L50 12 L72 40 Z', '#52C07F', '#2B7A4B', 3) +
     circ(36, 74, 4.5, '#F2545B') + circ(62, 72, 4.5, '#FFD93D') + circ(50, 56, 4.5, '#4D9DE0') + circ(40, 50, 4, '#FF8FC4') + circ(60, 42, 4, '#F2545B') + sh(starPath(50, 12, 11, 5), '#FFD93D', '#E0A800', 2.5),
   umbrella: () => { let c = ''; const cols = ['#4D9DE0', '#FFD93D', '#4D9DE0', '#FFD93D']; for (let i = 0; i < 4; i++) { const a = 8 + 84 * i / 4, b = 8 + 84 * (i + 1) / 4; c += sh(`M50 12 L${f1(a)} 52 Q${f1((a + b) / 2)} 60 ${f1(b)} 52 Z`, cols[i], '#2E6FA8', 2.5); }
-    return line('M50 52 L50 86 Q50 94 42 94 Q36 94 36 88', '#6B5B66', 5) + c + line('M50 12 L50 6', '#2E6FA8', 4) + sh('M16 70 Q19 76 16 79 Q13 76 16 70 Z M84 66 Q87 72 84 75 Q81 72 84 66 Z', '#7CC8F5', null); }
+    return line('M50 52 L50 86 Q50 94 42 94 Q36 94 36 88', '#6B5B66', 5) + c + line('M50 12 L50 6', '#2E6FA8', 4) + sh('M16 70 Q19 76 16 79 Q13 76 16 70 Z M84 66 Q87 72 84 75 Q81 72 84 66 Z', '#7CC8F5', null); },
+  barn: () => `<rect x="10" y="84" width="80" height="8" rx="4" fill="#8FD06C"/>` + sh('M18 88 L18 44 L50 16 L82 44 L82 88 Z', '#F2545B', '#B83A40', 4) + sh('M12 48 L50 12 L88 48', 'none', '#FFFFFF', 6) +
+    `<rect x="36" y="56" width="28" height="32" fill="#FFF4E6" stroke="#B83A40" stroke-width="3"/>` + line('M36 56 L64 88 M64 56 L36 88', '#B83A40', 3) + `<rect x="42" y="30" width="16" height="14" rx="2" fill="#FFD93D" stroke="#B83A40" stroke-width="3"/>`,
+  ship: () => line('M8 80 Q30 70 50 80 T92 80', '#4D9DE0', 5) + sh('M14 60 L86 60 L76 80 L24 80 Z', '#9C6B45', '#6B4A33', 4) + line('M50 60 L50 12', '#6B4A33', 4) +
+    sh('M52 16 L80 30 L52 44 Z', '#FFFFFF', '#C9BCC6', 3) + sh('M48 20 L22 50 L48 52 Z', '#FFFFFF', '#C9BCC6', 3) + sh('M50 12 L50 2 L66 7 Z', '#3D3547', null) + circ(34, 69, 3.5, '#FFD93D') + circ(50, 69, 3.5, '#FFD93D') + circ(66, 69, 3.5, '#FFD93D'),
+  egg: () => ell(50, 54, 28, 36, '#FFF1DC', '#D9BE96', 4) + ell(40, 40, 6, 11, '#FFFFFF', null, 0, 'opacity=".8" transform="rotate(20 40 40)"'),
+  chick: () => `<g transform="translate(50 96) scale(.82)">${petChick('#FFD93D')}</g>`,
+  pig: () => ell(50, 56, 34, 32, '#FFB3C8', '#E07A9A', 4) + sh('M22 34 L20 12 L40 26 Z M78 34 L80 12 L60 26 Z', '#FFB3C8', '#E07A9A', 3) +
+    ell(50, 66, 14, 10, '#FF96B3', '#E07A9A', 3) + ell(45, 66, 3, 4, '#C2436A') + ell(55, 66, 3, 4, '#C2436A') + circ(37, 48, 4, '#2B2238') + circ(63, 48, 4, '#2B2238') + circ(38.5, 46.5, 1.4, '#fff') + circ(64.5, 46.5, 1.4, '#fff') +
+    line('M42 80 Q50 85 58 80', '#C2436A', 2.5),
+  coin: () => circ(50, 50, 36, '#FFD93D', '#E0A800', 5) + circ(50, 50, 26, 'none', '#F0B820', 3) + sh(starPath(50, 52, 16, 7), '#FFF1A6', '#E0A800', 2) + ell(34, 32, 5, 8, '#FFFFFF', null, 0, 'opacity=".6" transform="rotate(35 34 32)"'),
+  chest: () => sh('M12 50 L88 50 L88 88 L12 88 Z', '#B07A52', '#6B4A33', 4) + sh('M12 50 C12 22 88 22 88 50 Z', '#C98A5C', '#6B4A33', 4) +
+    line('M12 50 L88 50 M30 30 L30 88 M70 30 L70 88', '#FFC83D', 5) + `<rect x="43" y="46" width="14" height="16" rx="3" fill="#FFD93D" stroke="#E0A800" stroke-width="2.5"/>` + circ(50, 54, 2.4, '#6B4A33'),
+  parrot: () => `<g transform="translate(50 97) scale(.8)">${petParrot('#F2545B')}</g>`
 };
 const iconSVG = (name, cls = '') => `<svg class="${cls}" viewBox="0 0 100 100" aria-hidden="true" stroke-linecap="round">${ICON[name]()}</svg>`;
 const COUNTS = {
@@ -1135,8 +1444,12 @@ const COUNTS = {
   flake: { pl: 'Schneeflocken', one: 'Eine Schneeflocke' }, snowman: { pl: 'Schneemänner', one: 'Ein Schneemann' }, flower: { pl: 'Blumen', one: 'Eine Blume' },
   butterfly: { pl: 'Schmetterlinge', one: 'Ein Schmetterling' }, planet: { pl: 'Planeten', one: 'Ein Planet' }, rocket: { pl: 'Raketen', one: 'Eine Rakete' },
   starfish: { pl: 'Seesterne', one: 'Ein Seestern' }, ornament: { pl: 'Weihnachtskugeln', one: 'Eine Weihnachtskugel' }, leaf: { pl: 'Blätter', one: 'Ein Blatt' },
-  mushroom: { pl: 'Pilze', one: 'Ein Pilz' }
+  mushroom: { pl: 'Pilze', one: 'Ein Pilz' }, egg: { pl: 'Eier', one: 'Ein Ei' }, chick: { pl: 'Küken', one: 'Ein Küken' }, pig: { pl: 'Schweine', one: 'Ein Schwein' },
+  coin: { pl: 'Goldmünzen', one: 'Eine Goldmünze' }, chest: { pl: 'Schatzkisten', one: 'Eine Schatzkiste' }, parrot: { pl: 'Papageien', one: 'Ein Papagei' }
 };
+// grammatical gender of the singular, for "Wo ist der größte Stern?"
+Object.entries({ star: 'm', heart: 'n', candle: 'f', balloon: 'm', gift: 'n', pumpkin: 'm', bat: 'f', shell: 'f', fish: 'm', flake: 'f', snowman: 'm', flower: 'f', butterfly: 'm', planet: 'm',
+  rocket: 'f', starfish: 'm', ornament: 'f', leaf: 'n', mushroom: 'm', egg: 'n', chick: 'n', pig: 'n', coin: 'f', chest: 'f', parrot: 'm' }).forEach(([id, g]) => { COUNTS[id].g = g; });
 // Shapes for the shape riddle (viewBox 0 0 100 100)
 const SHAPES = {
   kreis: { name: 'Kreis', g: 'm', d: () => 'M50 8 A42 42 0 1 1 49.9 8 Z' },
@@ -1315,6 +1628,46 @@ const BG = {
       '<ellipse cx="300" cy="900" rx="110" ry="22" fill="#8FC3E8"/><ellipse cx="300" cy="900" rx="60" ry="10" fill="none" stroke="#FFFFFF" stroke-width="3" opacity=".6" class="tw"/><ellipse cx="680" cy="950" rx="130" ry="24" fill="#8FC3E8"/><ellipse cx="690" cy="950" rx="70" ry="11" fill="none" stroke="#FFFFFF" stroke-width="3" opacity=".6" class="tw"/>' +
       `<g transform="translate(180 820) scale(.9)">${ICON.mushroom()}</g><g transform="translate(470 860) scale(.6)">${ICON.mushroom()}</g>` + hedgehog +
       dots(r, 24, 0, 820, 1000, 170, ['#FF9F43', '#F2545B', '#FFC83D']) + leaves + rain;
+  },
+  bauernhof(u) { const r = rng(37);
+    const R = '#E8554E', RO = '#B03A36', W = '#FFFFFF';
+    const barn = sh('M40 760 L40 470 L185 360 L330 470 L330 760 Z', R, RO, 5) + line('M28 478 L185 350 L342 478', W, 14) + line('M40 760 L330 760', RO, 5) +
+      `<rect x="120" y="580" width="130" height="180" fill="#FFF4E6" stroke="${RO}" stroke-width="5"/>` + line('M120 580 L250 760 M250 580 L120 760 M185 580 L185 760', RO, 5) +
+      `<rect x="158" y="430" width="54" height="50" rx="6" fill="#FFD93D" stroke="${RO}" stroke-width="5"/>` + line('M162 470 L208 470 M170 462 L204 462', '#E0A21F', 4) +
+      `<rect x="330" y="470" width="80" height="290" fill="#C9D6E6" stroke="#8C9AAE" stroke-width="5"/>` + sh('M330 472 C330 410 410 410 410 472 Z', '#DCE3EC', '#8C9AAE', 5) + line('M330 540 L410 540 M330 620 L410 620 M330 700 L410 700', '#8C9AAE', 3);
+    let fence = ''; for (let x = 440; x < 1010; x += 70) fence += `<rect x="${x}" y="660" width="16" height="120" rx="4" fill="#B07A52" stroke="#8A5A3C" stroke-width="3"/>`;
+    fence = `<rect x="430" y="684" width="580" height="14" rx="5" fill="#C98A5C"/><rect x="430" y="730" width="580" height="14" rx="5" fill="#C98A5C"/>` + fence;
+    const cow = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})">` +
+      [-60, -30, 30, 60].map(dx => `<rect x="${dx - 11}" y="20" width="22" height="62" rx="8" fill="${W}" stroke="#9AA3B5" stroke-width="4"/><rect x="${dx - 11}" y="70" width="22" height="14" rx="4" fill="#5A4A4A"/>`).join('') +
+      line('M86 -10 Q112 10 104 50', '#9AA3B5', 6) + ell(0, 0, 94, 56, W, '#9AA3B5', 5) + sh('M-20 -50 C10 -44 20 -10 -6 4 C-30 12 -44 -20 -20 -50 Z M40 0 C60 -20 86 -6 80 20 C70 40 44 30 40 0 Z', '#3D3547', null) +
+      ell(-40, 40, 20, 10, '#FFB3C8') + sh('M-116 -76 L-128 -96 L-108 -86 Z M-80 -76 L-68 -96 L-88 -86 Z', '#FFF1CC', '#C9B08A', 3) + ell(-126, -58, 16, 9, W, '#9AA3B5', 4) + ell(-70, -58, 16, 9, W, '#9AA3B5', 4) +
+      circ(-98, -40, 40, W, '#9AA3B5', 5) + ell(-98, -16, 28, 18, '#FFB3C8', '#E07A9A', 3) + ell(-106, -16, 3.5, 5, '#C2436A') + ell(-90, -16, 3.5, 5, '#C2436A') +
+      circ(-112, -48, 5, '#2B2238') + circ(-84, -48, 5, '#2B2238') + circ(-110, -50, 1.8, W) + circ(-82, -50, 1.8, W) + `</g>`;
+    const hen = (x, y, s, flip) => `<g transform="translate(${x} ${y}) scale(${flip ? -s : s} ${s})">` + line('M-6 20 L-6 34 M6 20 L6 34', '#FF9F43', 4) + ell(0, 0, 30, 24, W, '#C9BCC6', 4) +
+      sh('M22 -6 L44 -26 L40 -4 Z', W, '#C9BCC6', 3) + circ(-22, -22, 15, W, '#C9BCC6', 4) + sh('M-30 -36 Q-26 -46 -22 -38 Q-18 -48 -14 -36 Z', '#F2545B', null) + sh('M-36 -22 L-46 -18 L-36 -14 Z', '#FF9F43', null) + circ(-26, -25, 2.6, '#2B2238') + `</g>`;
+    const bale = (x, y) => `<rect x="${x}" y="${y}" width="120" height="80" rx="18" fill="#F2D27A" stroke="#C9A04A" stroke-width="4"/>` + line(`M${x + 14} ${y + 22} L${x + 106} ${y + 22} M${x + 14} ${y + 58} L${x + 106} ${y + 58}`, '#C9A04A', 3, 'opacity=".7"');
+    return sky(u, '#9EDCFF', '#E8F8FF') + sunDisk(880, 130, 56) + cloud(560, 150, .8) + cloud(260, 110, .55) +
+      '<path d="M0 640 Q300 560 620 620 T1000 590 L1000 1000 L0 1000 Z" fill="#B5E39A"/>' + barn + fence + bale(820, 740) + bale(880, 690) +
+      cow(720, 690, .8) + '<path d="M0 790 Q500 740 1000 790 L1000 1000 L0 1000 Z" fill="#8FD06C"/>' + hen(120, 860, 1) + hen(880, 900, .9, true) +
+      `<g transform="translate(210 930) scale(.55) translate(-50 -96)">${ICON.chick()}</g>` + dots(r, 22, 0, 830, 1000, 160, ['#FFFFFF', '#FFD93D', '#FF8FC4']);
+  },
+  piraten(u) { const r = rng(41);
+    const wave = y => { let d = `M-60 ${y}`; for (let x = -60; x < 1080; x += 60) d += ` q30 -18 60 0`; return line(d, '#fff', 5, 'opacity=".55"'); };
+    const gull = (x, y, s) => line(`M${x} ${y} q${16 * s} ${-18 * s} ${32 * s} 0 q${16 * s} ${-18 * s} ${32 * s} 0`, '#fff', 6);
+    const ship = `<g class="bob">` + sh('M60 520 L440 520 L400 600 Q250 616 100 600 Z', '#9C6B45', '#6B4A33', 5) + line('M80 548 L420 548', '#6B4A33', 4) +
+      [130, 190, 250, 310, 370].map(x => circ(x, 572, 10, '#FFD166', '#6B4A33', 3)).join('') + line('M170 520 L170 250 M330 520 L330 290', '#6B4A33', 9) +
+      sh('M178 262 Q240 300 178 470 Z', '#FFFFFF', '#C9BCC6', 4) + sh('M162 272 Q96 320 162 470 Z', '#FFFFFF', '#C9BCC6', 4) + sh('M338 302 Q390 340 338 480 Z', '#FFFFFF', '#C9BCC6', 4) +
+      sh('M170 250 L170 206 L238 222 L170 242', '#3D3547', null) + line('M184 216 L208 234 M208 216 L184 234', '#FFFFFF', 3.5) + circ(196, 224, 7.5, '#FFFFFF') + circ(193.5, 223, 1.8, '#3D3547') + circ(198.5, 223, 1.8, '#3D3547') + `</g>`;
+    const palm = x => `<path d="M${x} 700 Q${x + 20} 580 ${x - 10} 470" fill="none" stroke="#9C6B45" stroke-width="22"/>` +
+      [[-120, -20], [-90, 50], [110, -10], [90, 60], [0, -90]].map(([dx, dy]) => `<path d="M${x - 10} 470 Q${x - 10 + dx * .5} ${470 + dy - 50} ${x - 10 + dx} ${470 + dy}" fill="none" stroke="#3FA66B" stroke-width="26"/>`).join('') +
+      circ(x - 18, 482, 12, '#8A5A3C') + circ(x - 2, 486, 12, '#8A5A3C');
+    return sky(u, '#8ED6FF', '#DDF4FF', .55) + sunDisk(880, 140, 56) + cloud(560, 130, .8) + gull(420, 180, 1) + gull(520, 230, .7) +
+      `<defs><linearGradient id="${u}sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4FC3EE"/><stop offset="1" stop-color="#1F8FCC"/></linearGradient></defs><rect y="520" width="1000" height="300" fill="url(#${u}sea)"/>` +
+      ship + `<g class="drift">${wave(620)}${wave(690)}</g>` +
+      '<path d="M660 700 Q800 610 960 690 L1000 720 L620 720 Z" fill="#FFE2A2"/>' + palm(820) +
+      '<path d="M0 790 Q500 740 1000 790 L1000 1000 L0 1000 Z" fill="#FFE2A2"/>' + dots(r, 50, 0, 810, 1000, 190, ['#F2CB82', '#EFC074']) +
+      `<g transform="translate(830 850) scale(1.3) translate(-50 -50)">${ICON.chest()}</g>` + [[700, 930], [760, 950], [950, 920]].map(([x, y]) => `<g transform="translate(${x} ${y}) scale(.34) translate(-50 -50)">${ICON.coin()}</g>`).join('') +
+      `<g transform="rotate(14 150 900)">${sh(starPath(150, 900, 36, 16), '#FF9F43', '#E07A1E', 4)}</g>`;
   }
 };
 function bgSVG(id, preserve = 'xMidYMax slice') { const u = 'b' + (++UID); return `<svg class="bg" viewBox="0 0 1000 1000" preserveAspectRatio="${preserve}" aria-hidden="true" stroke-linecap="round">${BG[id](u)}</svg>`; }
@@ -1322,13 +1675,14 @@ function bgSVG(id, preserve = 'xMidYMax slice') { const u = 'b' + (++UID); retur
 /* =====================================================================
    Sound: speech + little synth effects
    The sentences are recorded clips in voice/ (made by tools/build-voice.mjs) played through Web Audio.
+   The friends say their own lines with their own voice (speakers), everything else uses the game voice.
    Anything without a clip, e.g. a name typed in by the parents, is spoken by the tablet's German voice.
    ===================================================================== */
 const VOICE_CACHE = 'zk-voice'; // same name in sw.js
 const Voice = {
-  voice: null, lines: null, clips: new Map(), playing: [], turn: 0,
+  voice: null, lines: null, speakers: {}, clips: new Map(), playing: [], turn: 0,
   init() {
-    fetch('voice/index.json').then(r => r.json()).then(m => { this.lines = m.lines; this.keep(); }).catch(() => {});
+    fetch('voice/index.json').then(r => r.json()).then(m => { this.lines = m.lines; this.speakers = m.speakers || {}; this.keep(); }).catch(() => {});
     if (!('speechSynthesis' in window)) return;
     const choose = () => {
       const vs = speechSynthesis.getVoices() || [];
@@ -1341,8 +1695,8 @@ const Voice = {
   },
   // Clip ids for a text: the longest run of sentences that has a clip, then the rest ("Super!" + "Die blaue Mütze!").
   // null if any part is missing, so one sentence never mixes the recorded and the tablet voice.
-  plan(text) {
-    const L = this.lines; if (!L) return null;
+  plan(text, L) {
+    if (!L) return null;
     const p = text.split(/(?<=[.!?])\s+/), ids = [];
     for (let i = 0; i < p.length;) {
       let j = p.length; while (j > i && !L[p.slice(i, j).join(' ')]) j--;
@@ -1368,10 +1722,10 @@ const Voice = {
     }
     return clip;
   },
-  say(text) {
+  say(text, who) {
     if (!settings.voice) return;
     this.stop();
-    const ids = this.plan(text), turn = this.turn;
+    const ids = this.plan(text, this.speakers[who]) || this.plan(text, this.lines), turn = this.turn;
     if (!ids || !Sfx.ensure()) { this.speak(text); return; }
     Promise.all(ids.map(id => this.load(id))).then(bufs => {
       if (turn !== this.turn) return;
@@ -1398,7 +1752,8 @@ const Voice = {
     if (!('caches' in window) || !('serviceWorker' in navigator)) return;
     navigator.serviceWorker.ready.then(() => new Promise(r => setTimeout(r, 3000))).then(async () => {
       const cache = await caches.open(VOICE_CACHE), have = new Set((await cache.keys()).map(r => r.url));
-      const want = new Set(Object.values(this.lines).map(id => new URL(`voice/${id}.mp3`, location.href).href));
+      const ids = [this.lines, ...Object.values(this.speakers)].flatMap(Object.values);
+      const want = new Set(ids.map(id => new URL(`voice/${id}.mp3`, location.href).href));
       await Promise.all([...have].filter(u => !want.has(u)).map(u => cache.delete(u)));
       const todo = [...want].filter(u => !have.has(u));
       await Promise.all([0, 1, 2, 3].map(async () => { for (let u; (u = todo.pop());) await cache.add(u); }));
@@ -1442,6 +1797,8 @@ const Sfx = {
         case 'woof': this.sweep(460, 230, 0, .13, 'square', .07); this.sweep(460, 230, .22, .13, 'square', .07); break;
         case 'boing': this.sweep(200, 900, 0, .28, 'sine', .16); break;
         case 'roar': this.sweep(200, 90, 0, .55, 'sawtooth', .06); this.sweep(260, 120, 0, .55, 'triangle', .08); break;
+        case 'peep': [0, .16, .32].forEach(t => this.sweep(2300, 3000, t, .09, 'sine', .08)); break;
+        case 'squawk': this.sweep(1200, 650, 0, .2, 'sawtooth', .045); this.sweep(1300, 700, .26, .18, 'sawtooth', .045); break;
       }
     } catch (e) { /* audio unavailable */ }
   },
@@ -1476,19 +1833,24 @@ const XMAS_SONG = Object.assign({}, SONGS[2], { name: 'Morgen kommt der Weihnach
 settings.names = Object.assign({}, settings.names);
 if (settings.name && !settings.names.rosa) settings.names.rosa = settings.name;
 const esc = s => String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
-const state = { ch: CHAR[store.get('char', 'rosa')] ? store.get('char', 'rosa') : 'rosa', theme: null, outfits: {}, cat: 'kleid', lastColor: {}, equips: 0, nudged: false, taskIdx: Math.floor(Math.random() * 4), task: null, surprise: null, dancing: false };
+const state = { ch: CHAR[store.get('char', 'rosa')] ? store.get('char', 'rosa') : 'rosa', theme: null, outfits: {}, cat: 'kleid', lastColor: {}, equips: 0, nudged: false, taskIdx: Math.floor(Math.random() * 6), task: null, surprise: null, dancing: false };
 const el = {
   princess: $('#princess'), fx: $('#fx'), scene: $('#scene'), tabs: $('#tabs'), items: $('#items'), colors: $('#colors'),
   bubble: $('#bubble'), bubbleTxt: $('#bubble-txt'), starCount: $('#star-count'), stars: $('#stars'),
   overlay: $('#overlay'), ovQ: $('#ov-q'), ovHint: $('#ov-hint'), ovCount: $('#ov-count'), ovChoices: $('#ov-choices')
 };
 const charName = id => (settings.names[id] || CHAR[id].name);
+// Who wears what: kind of character (girl, boy, snow), its wardrobe tabs and which tabs may stay empty
+const me = () => CHAR[state.ch];
+const tabsOf = ch => ch.tabs || CAT_IDS;
+const wears = (ch, k) => !k.only || k.only.includes(ch.kind || 'girl');
+const mayBeEmpty = (ch, cat) => ['kopf', 'extra', 'tier'].includes(cat) || (ch.bare || []).includes(cat);
 const outfitKey = () => state.ch + ':' + state.theme.id;
 const outfit = () => state.outfits[outfitKey()];
 
 let bubbleTimer = 0;
 function say(text) {
-  Voice.say(text);
+  Voice.say(text, state.ch);
   if (!$('#scr-play').hidden) {
     el.bubbleTxt.textContent = text; el.bubble.hidden = false;
     el.bubbleTxt.style.animation = 'none'; void el.bubbleTxt.offsetWidth; el.bubbleTxt.style.animation = '';
@@ -1546,25 +1908,29 @@ function renderThemes() {
 function enterTheme(id) {
   state.theme = THEME[id];
   if (!state.outfits[outfitKey()]) state.outfits[outfitKey()] = clone(CHAR[state.ch].start);
-  state.cat = 'kleid'; state.equips = 0; state.nudged = false;
+  state.cat = tabsOf(me())[0]; state.equips = 0; state.nudged = false;
   $('#scr-play').style.setProperty('--tint', state.theme.tint);
   el.scene.innerHTML = bgSVG(id);
   drawPrincess(); renderPanel(); updateStars(false);
   $('#btn-task').classList.remove('nudge');
   show('scr-play');
-  say(state.theme.intro);
+  say((me().intro || {})[id] || state.theme.intro);
 }
 
 // Theme items plus every surprise item already unlocked with stars
 function panelList(cat) {
-  const list = state.theme.panel[cat].slice();
-  SPECIALS.forEach(k => { if (k.cat === cat && stars >= k.need && !list.includes(k.id)) list.push(k.id); });
+  const ch = me(); if (!tabsOf(ch).includes(cat)) return [];
+  const list = state.theme.panel[cat].filter(id => (id === 'none' ? mayBeEmpty(ch, cat) : wears(ch, K[id])));
+  SPECIALS.forEach(k => { if (k.cat === cat && stars >= k.need && wears(ch, k) && !list.includes(k.id)) list.push(k.id); });
   return list;
 }
 const TAB_ICON = { kleid: ['gown', 'rosa'], kopf: ['crown', 'gold'], schuhe: ['pumps', 'rosa'], extra: ['wand', 'gold'], tier: ['cat', 'orange'] };
+const TAB_ICON_FRIENDS = Object.assign({}, TAB_ICON, { kleid: ['overalls', 'blau'], schuhe: ['sneakers', 'rot'] });
 function renderPanel() {
   const o = outfit();
-  el.tabs.innerHTML = CATS.map(c => `<button class="tab${c.id === state.cat ? ' on' : ''}" data-cat="${c.id}" aria-label="${c.label}" aria-pressed="${c.id === state.cat}">${itemSVG(K[TAB_ICON[c.id][0]], TAB_ICON[c.id][1], state.ch)}</button>`).join('');
+  const icons = me().kind ? TAB_ICON_FRIENDS : TAB_ICON, tabs = CATS.filter(c => tabsOf(me()).includes(c.id));
+  el.tabs.style.setProperty('--n', tabs.length);
+  el.tabs.innerHTML = tabs.map(c => `<button class="tab${c.id === state.cat ? ' on' : ''}" data-cat="${c.id}" aria-label="${c.label}" aria-pressed="${c.id === state.cat}">${itemSVG(K[icons[c.id][0]], icons[c.id][1], state.ch)}</button>`).join('');
   const cur = o[state.cat] || { k: 'none' }, list = panelList(state.cat);
   el.items.dataset.n = list.length;
   el.items.innerHTML = list.map(id => {
@@ -1618,14 +1984,15 @@ el.princess.addEventListener('click', e => {
   const petEl = e.target.closest('.pet'), pet = outfit().tier;
   if (petEl && pet && K[pet.k]) { restart(petEl, 'jump'); Sfx.play(K[pet.k].sound); say(K[pet.k].call); return; }
   $('.pwrap').classList.add('happy'); hop(); Sfx.play('tap');
-  say(pick(['Hihi!', 'Das kitzelt!', 'Ich sehe toll aus!', 'Danke schön!', 'Du bist super!', 'Juhu!', `Ich bin ${charName(state.ch)}!`]));
+  say(pick(['Hihi!', 'Das kitzelt!', 'Ich sehe toll aus!', 'Danke schön!', 'Du bist super!', 'Juhu!', `Ich bin ${charName(state.ch)}!`, ...(me().taps || [])]));
   setTimeout(() => { if (!state.dancing) $('.pwrap').classList.remove('happy'); }, 1400);
 });
 
 function magic() {
   const th = state.theme, o = outfit();
-  CAT_IDS.forEach(cat => {
+  tabsOf(me()).forEach(cat => {
     const list = panelList(cat).filter(id => id !== 'none'), fit = list.filter(id => K[id].themes.includes(th.id));
+    if (!list.length) return;
     const id = pick(fit.length ? fit : list), k = K[id];
     o[cat] = { k: id, c: k.colors.length ? pick(k.colors) : null };
     if (o[cat].c) state.lastColor[id] = o[cat].c;
@@ -1679,7 +2046,7 @@ function addStar(fromEl) {
   const sx = a.left + a.width / 2 - 32, sy = a.top + a.height / 2 - 32;
   fs.style.left = sx + 'px'; fs.style.top = sy + 'px'; document.body.appendChild(fs);
   requestAnimationFrame(() => requestAnimationFrame(() => { fs.style.transform = `translate(${f1(b.left + 12 - sx)}px, ${f1(b.top + b.height / 2 - 32 - sy)}px) scale(.55)`; }));
-  const unlocked = SPECIALS.find(k => k.need === stars);
+  const unlocked = SPECIALS.find(k => k.need === stars && wears(me(), k));
   setTimeout(() => {
     fs.remove(); updateStars(true);
     if (!unlocked && stars % 5 === 0) { Sfx.play('fanfare'); confetti(120); setTimeout(() => say(`Wow! Schon ${stars} Sterne! Du bist ein Rätsel-Profi!`), 400); }
@@ -1731,8 +2098,8 @@ function wrong(btn) { Sfx.play('nope'); restart(btn, 'wrong'); }
 function startTask() {
   stopDance();
   $('#btn-task').classList.remove('nudge');
-  const type = ['color', 'fits', 'count', 'shape'][state.taskIdx++ % 4];
-  ({ color: taskColor, fits: taskFits, count: taskCount, shape: taskShape })[type]();
+  const type = ['color', 'fits', 'count', 'shape', 'pattern', 'size'][state.taskIdx++ % 6];
+  ({ color: taskColor, fits: taskFits, count: taskCount, shape: taskShape, pattern: taskPattern, size: taskSize })[type]();
 }
 function taskColor() {
   const pool = CAT_IDS.flatMap(cat => panelList(cat)).filter(id => id !== 'none' && K[id].colors.length >= 3);
@@ -1746,9 +2113,12 @@ function isWrongFor(k, th) { return k.themes.length > 0 && !k.themes.includes(th
 function taskFits() {
   const th = state.theme;
   const good = CAT_IDS.flatMap(cat => panelList(cat)).filter(id => id !== 'none' && K[id].themes.includes(th.id));
+  if (!good.length) { taskColor(); return; }
   const kg = K[pick(good)];
-  let bad = Object.values(K).filter(k => k.cat === kg.cat && isWrongFor(k, th));
-  if (bad.length < 2) bad = bad.concat(shuffle(Object.values(K).filter(k => k.cat !== kg.cat && isWrongFor(k, th))));
+  const wrong = Object.values(K).filter(k => isWrongFor(k, th)), mine = wrong.filter(k => wears(me(), k)); // rather show things this character could wear
+  let bad = mine.filter(k => k.cat === kg.cat);
+  if (bad.length < 2) bad = bad.concat(shuffle(mine.filter(k => k.cat !== kg.cat)));
+  if (bad.length < 2) bad = bad.concat(shuffle(wrong.filter(k => !bad.includes(k))));
   const opts = shuffle([kg, ...shuffle(bad.slice(0, Math.max(2, bad.length))).slice(0, 2)]);
   state.task = { type: 'fits', answer: kg.id, q: th.fitQ };
   openTask(th.fitQ, opts.map(k => `<button class="choice" data-k="${k.id}" aria-label="${k.name}">${itemSVG(k, state.lastColor[k.id] || k.colors[0], state.ch)}</button>`).join(''));
@@ -1767,8 +2137,35 @@ function taskShape() {
   state.task = { type: 'shape', target, q, color: Object.fromEntries(ids.map((id, i) => [id, cols[i]])) };
   openTask(q, ids.map((id, i) => `<button class="choice" data-s="${id}" aria-label="${SHAPES[id].name}">${shapeSVG(id, cols[i])}</button>`).join(''));
 }
-function countAlong() {
-  const t = state.task, objs = [...el.ovCount.querySelectorAll('.cobj')];
+// Pattern riddle: what comes next in the row? Either the colours repeat (same shape) or the shapes repeat (same colour).
+function taskPattern() {
+  const unit = pick(['AB', 'AB', 'AB', 'ABC', 'AAB', 'ABB']), byColor = Math.random() < .5;
+  const vals = shuffle((byColor ? ALL : Object.keys(SHAPES)).slice()), shape = pick(Object.keys(SHAPES)), color = pick(ALL);
+  const valOf = ch => vals['ABC'.indexOf(ch)], seq = [0, 1, 2, 3, 4, 5].map(i => valOf(unit[i % unit.length]));
+  const answer = seq[5], others = shuffle([...new Set(seq)].filter(v => v !== answer).concat(vals.slice(3))), opts = shuffle([answer, ...others.slice(0, 2)]);
+  const art = v => (byColor ? shapeSVG(shape, v) : shapeSVG(v, color)), name = v => (byColor ? COLORS[v].name : SHAPES[v].name);
+  state.task = { type: 'pattern', answer, seq, name, q: 'Was kommt als Nächstes?',
+    praise: byColor ? COLORS[answer].name + '!' : `${SHAPES[answer].g === 'm' ? 'Der' : 'Das'} ${SHAPES[answer].name}!` };
+  openTask(state.task.q, opts.map(v => `<button class="choice" data-v="${v}" aria-label="${name(v)}">${art(v)}</button>`).join(''),
+    seq.slice(0, 5).map(v => `<span class="pat">${art(v)}</span>`).join('') + '<span class="pat ask">?</span>');
+}
+// Say the row together: each piece lights up while its colour or shape is named.
+function readAlong(t) {
+  if (state.task !== t) return; // closed meanwhile
+  const pats = [...el.ovCount.querySelectorAll('.pat:not(.ask)')]; t.busy = true;
+  pats.forEach((p, i) => setTimeout(() => { if (state.task !== t) return; restart(p, 'hi'); Voice.say(t.name(t.seq[i]) + '!'); }, 800 * (i + 1)));
+  setTimeout(() => { if (state.task !== t) return; t.busy = false; restart(el.ovCount.querySelector('.ask'), 'hi'); say('Und was kommt dann?'); }, 800 * (pats.length + 1) + 200);
+}
+// Size riddle: the biggest or the smallest of three
+function taskSize() {
+  const obj = pick(state.theme.counts), big = Math.random() < .5, noun = COUNTS[obj].one.split(' ')[1], art = { m: 'der', f: 'die', n: 'das' }[COUNTS[obj].g];
+  const word = big ? 'größte' : 'kleinste', target = big ? 1 : .42;
+  state.task = { type: 'size', target, big, q: `Wo ist ${art} ${word} ${noun}?`, praise: `${cap(art)} ${word} ${noun}!` };
+  openTask(state.task.q, shuffle([.42, .7, 1]).map(z => `<button class="choice" data-z="${z}" aria-label="${noun}"><span class="sz" style="--z:${z}">${iconSVG(obj)}</span></button>`).join(''));
+}
+function countAlong(t) {
+  if (state.task !== t) return; // closed meanwhile
+  const objs = [...el.ovCount.querySelectorAll('.cobj')];
   objs.forEach(o => { o.classList.remove('done'); delete o.dataset.n; }); t.counted = 0; t.busy = true;
   objs.forEach((o, i) => setTimeout(() => { if (state.task !== t) return; o.dataset.n = i + 1; o.classList.add('done'); Sfx.play('tap'); Voice.say(NUMW[i + 1]); }, 900 * (i + 1)));
   setTimeout(() => { if (state.task !== t) return; t.busy = false; t.counted = t.n; say(`${NUMW[t.n]}! Tipp auf die ${t.n}.`); }, 900 * (objs.length + 1) + 200);
@@ -1791,11 +2188,18 @@ el.ovChoices.addEventListener('click', e => {
     if (t.busy) return;
     const v = +b.dataset.n;
     if (v === t.n) success(b, t.n === 1 ? `Richtig! ${COUNTS[t.obj].one}!` : `Richtig! ${NUMW[t.n]} ${COUNTS[t.obj].pl}!`);
-    else { wrong(b); say('Hmm, lass uns zusammen zählen!'); setTimeout(countAlong, 1400); }
+    else { wrong(b); say('Hmm, lass uns zusammen zählen!'); setTimeout(() => countAlong(t), 1400); }
   } else if (t.type === 'shape') {
     const s = b.dataset.s, S = SHAPES[t.target];
     if (s === t.target) success(b, `${pick(PRAISE)}! ${S.g === 'm' ? 'Der' : 'Das'} ${adj(t.color[s], false)} ${S.name}!`);
     else { wrong(b); b.classList.add('dim'); say(`Das ist ein ${SHAPES[s].name}. Such ${S.g === 'm' ? 'den' : 'das'} ${S.name}!`); }
+  } else if (t.type === 'pattern') {
+    if (t.busy) return;
+    if (b.dataset.v === t.answer) { el.ovCount.querySelector('.ask').innerHTML = b.innerHTML; success(b, `${pick(PRAISE)}! ${t.praise}`); }
+    else { wrong(b); b.classList.add('dim'); say('Hmm, lass uns die Reihe zusammen sagen!'); setTimeout(() => readAlong(t), 1600); }
+  } else if (t.type === 'size') {
+    if (+b.dataset.z === t.target) success(b, `${pick(PRAISE)}! ${t.praise}`);
+    else { wrong(b); b.classList.add('dim'); say(t.big ? 'Hmm, schau genau: Was ist am größten?' : 'Hmm, schau genau: Was ist am kleinsten?'); }
   }
 });
 el.ovCount.addEventListener('click', e => {
@@ -1828,7 +2232,7 @@ $('#lightbox').addEventListener('click', () => { $('#lightbox').hidden = true; }
    Parent settings (press and hold)
    ===================================================================== */
 function openParent() {
-  $('#set-names').innerHTML = CHARS.map(c => `<div class="prow"><label for="set-name-${c.id}" style="min-width:9em">${c.name} (${c.desc})</label><input type="text" id="set-name-${c.id}" maxlength="24" placeholder="${c.id === 'rosa' ? 'Rosa, z. B. Peach' : c.name}" value="${esc(settings.names[c.id] || '')}"></div>`).join('');
+  $('#set-names').innerHTML = CHARS.map(c => `<div class="prow"><label for="set-name-${c.id}" style="min-width:9em">${c.name} (${c.desc})</label><input type="text" id="set-name-${c.id}" maxlength="24" placeholder="${c.alt ? `${c.name}, z. B. ${c.alt}` : c.name}" value="${esc(settings.names[c.id] || '')}"></div>`).join('');
   $('#set-voice').checked = settings.voice; $('#set-sound').checked = settings.sound;
   $('#saved').hidden = true; resetConfirm(); $('#parent').hidden = false;
 }
